@@ -1,0 +1,36 @@
+root@conexao:/var/www/conexaomental# cd /var/www/conexaomental
+root@conexao:/var/www/conexaomental# nohup python3 -m http.server 80 --directory dist > server.log 2>&1 &
+[1] 3789999
+root@conexao:/var/www/conexaomental# sleep 2 && curl -s https://clinicaconexaomental.online | head -20
+[1]+  Exit 1                  nohup python3 -m http.server 80 --directory dist > server.log 2>&1
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="data:application/octet-stream;base64,aW1wb3J0IHsgY3JlYXRlUm9vdCB9IGZyb20gJ3JlYWN0LWRvbS9jbGllbnQnCmltcG9ydCBBcHAgZnJvbSAnLi9BcHAudHN4JwppbXBvcnQgJy4vaW5kZXguY3NzJwoKY3JlYXRlUm9vdChkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgicm9vdCIpISkucmVuZGVyKDxBcHAgLz4pOwo=" as="script" crossorigin />
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+    <link rel="dns-prefetch" href="https://zvjbwwkjcibthjnogmaq.supabase.co" />
+    
+    <!-- Primary Meta Tags -->
+    <title>Clínica Conexão Mental - Teleconsultas com Psicólogos e Psiquiatras Online</title>
+    <meta name="title" content="Clínica Conexão Mental - Teleconsultas com Psicólogos e Psiquiatras Online" />
+    <meta name="description" content="Plataforma líder em teleconsultas de saúde mental no Brasil. Agende consultas online com psicólogos e psiquiatras qualificados. Atendimento 24h, seguro e confidencial." />
+    <meta name="keywords" content="psicólogo online, psiquiatra online, teleconsulta, terapia online, saúde mental, consulta psicológica, ansiedade, depressão, brasil" />
+    <meta name="author" content="Conexão Mental" />
+    <meta name="robots" content="index, follow" />
+    <meta name="language" content="Portuguese" />
+root@conexao:/var/www/conexaomental# ^C
+root@conexao:/var/www/conexaomental# find /var/www -name "*.html" | head -5
+/var/www/clinicaconexaomental-backup-20250729/clinicaconexaomental/index.html
+/var/www/clinicaconexaomental-backup-20250729/index.html
+/var/www/html/index.nginx-debian.html
+/var/www/conexaomental/dist/index.html
+/var/www/conexaomental/node_modules/decimal.js-light/doc/API.html
+root@conexao:/var/www/conexaomental# sudo cp -r /var/www/conexaomental/dist/* /var/www/html/
+root@conexao:/var/www/conexaomental# sudo systemctl reload nginx
+root@conexao:/var/www/conexaomental# curl -s https://clinicaconexaomental.online | grep -i "planos\|valor único"
+root@conexao:/var/www/conexaomental# 

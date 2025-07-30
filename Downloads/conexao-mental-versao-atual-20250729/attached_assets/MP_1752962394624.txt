@@ -1,0 +1,11 @@
+
+
+<body>
+  <script src="https://sdk.mercadopago.com/js/v2"></script>
+</body>
+
+
+
+<script>
+  const mp = new MercadoPago("APP_USR-76d2072e-2c20-49db-9c16-5915392a01d3");
+</script>

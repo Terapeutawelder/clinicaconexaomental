@@ -1,0 +1,35 @@
+root@conexao:/var/www/conexaomental# pm2 restart conexaomental
+Use --update-env to update environment variables
+[PM2] Applying action restartProcessId on app [conexaomental](ids: [ 0 ])
+[PM2] [conexaomental](0) ✓
+┌────┬──────────────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name             │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+├────┼──────────────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
+│ 0  │ conexaomental    │ default     │ N/A     │ fork    │ 3684955  │ 0s     │ 16   │ online    │ 0%       │ 17.6mb   │ root     │ disabled │
+└────┴──────────────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+root@conexao:/var/www/conexaomental# pm2 logs conexaomental --lines 10
+[TAILING] Tailing last 10 lines for [conexaomental] process (change the value with --lines option)
+/root/.pm2/logs/conexaomental-out.log last 10 lines:
+/root/.pm2/logs/conexaomental-error.log last 10 lines:
+0|conexaom | npm error A complete log of this run can be found in: /root/.npm/_logs/2025-07-29T20_40_47_511Z-debug-0.log
+0|conexaom | npm error Missing script: "start"
+0|conexaom | npm error
+0|conexaom | npm error Did you mean one of these?
+0|conexaom | npm error   npm star # Mark your favorite packages
+0|conexaom | npm error   npm stars # View packages marked as favorites
+0|conexaom | npm error
+0|conexaom | npm error To see a list of scripts, run:
+0|conexaom | npm error   npm run
+0|conexaom | npm error A complete log of this run can be found in: /root/.npm/_logs/2025-07-29T20_40_48_109Z-debug-0.log
+
+^C
+root@conexao:/var/www/conexaomental# pm2 delete conexaomental
+[PM2] Applying action deleteProcessId on app [conexaomental](ids: [ 0 ])
+[PM2] [conexaomental](0) ✓
+┌────┬───────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name      │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+└────┴───────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+root@conexao:/var/www/conexaomental# pm2 start dist/index.js --name "conexaomental" --cwd /var/www/conexaomental
+[PM2][ERROR] Script not found: /var/www/conexaomental/dist/index.js
+root@conexao:/var/www/conexaomental# pm2 logs conexaomental --lines 5
+[TAILING] Tailing last 5 lines for [conexaomental] process (change the value with --lines option)

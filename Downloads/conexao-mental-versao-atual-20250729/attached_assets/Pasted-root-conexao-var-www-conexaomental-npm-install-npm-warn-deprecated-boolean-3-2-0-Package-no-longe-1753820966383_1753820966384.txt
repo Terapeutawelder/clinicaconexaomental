@@ -1,0 +1,71 @@
+root@conexao:/var/www/conexaomental# npm install
+npm warn deprecated boolean@3.2.0: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
+
+added 469 packages, and audited 470 packages in 46s
+
+87 packages are looking for funding
+  run `npm fund` for details
+
+7 vulnerabilities (3 low, 4 moderate)
+
+To address all issues, run:
+  npm audit fix
+
+Run `npm audit` for details.
+root@conexao:/var/www/conexaomental# npm run build
+
+> vite_react_shadcn_ts@0.0.0 build
+> vite build
+
+vite v5.4.10 building for production...
+transforming (1) index.htmlBrowserslist: browsers data (caniuse-lite) is 10 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+✓ 3561 modules transformed.
+dist/index.html                                   5.40 kB │ gzip:   1.69 kB
+dist/assets/index-ANRZSTN1.css                   74.70 kB │ gzip:  12.58 kB
+dist/assets/CTASection-BH601FUn.js                0.66 kB │ gzip:   0.43 kB
+dist/assets/SearchSection-Ho2h4k2G.js             0.91 kB │ gzip:   0.47 kB
+dist/assets/OnlineTherapySection-C42C85Ho.js      1.48 kB │ gzip:   0.64 kB
+dist/assets/FeaturesSection-D3PF5InE.js           1.86 kB │ gzip:   0.95 kB
+dist/assets/ProfessionalsSection-CcH8eJW_.js      3.22 kB │ gzip:   1.11 kB
+dist/assets/BookingFlow-BimD4imt.js              14.35 kB │ gzip:   4.55 kB
+dist/assets/index-BzKd26S_.js                 1,224.56 kB │ gzip: 343.99 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 28.07s
+root@conexao:/var/www/conexaomental# pm2 restart conexaomental
+Use --update-env to update environment variables
+[PM2] Applying action restartProcessId on app [conexaomental](ids: [ 0 ])
+[PM2] [conexaomental](0) ✓
+┌────┬──────────────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name             │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+├────┼──────────────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
+│ 0  │ conexaomental    │ default     │ N/A     │ fork    │ 3661919  │ 0s     │ 15   │ online    │ 0%       │ 34.3mb   │ root     │ disabled │
+└────┴──────────────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+root@conexao:/var/www/conexaomental# ^C
+root@conexao:/var/www/conexaomental# cp .env ~/.env-backup-$(date +%Y%m%d)
+cp: cannot stat '.env': No such file or directory
+root@conexao:/var/www/conexaomental# ^C
+root@conexao:/var/www/conexaomental# git fetch origin
+root@conexao:/var/www/conexaomental# git reset --hard origin/main
+HEAD is now at c816b7b "Documentação sistema telemedicina"
+root@conexao:/var/www/conexaomental# ^C
+root@conexao:/var/www/conexaomental# ls -la | grep env
+root@conexao:/var/www/conexaomental# npm install
+
+up to date, audited 470 packages in 7s
+
+87 packages are looking for funding
+  run `npm fund` for details
+
+7 vulnerabilities (3 low, 4 moderate)
+
+To address all issues, run:
+  npm audit fix
+
+Run `npm audit` for details.
+root@conexao:/var/www/conexaomental# 

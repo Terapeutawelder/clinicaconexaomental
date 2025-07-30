@@ -1,0 +1,39 @@
+root@conexao:/var/www/conexaomental# find /var/www -name "*.html" | head -5
+/var/www/clinicaconexaomental-backup-20250729/clinicaconexaomental/index.html
+/var/www/clinicaconexaomental-backup-20250729/index.html
+/var/www/html/index.nginx-debian.html
+/var/www/conexaomental/dist/index.html
+/var/www/conexaomental/node_modules/decimal.js-light/doc/API.html
+root@conexao:/var/www/conexaomental# sudo cp -r /var/www/conexaomental/dist/* /var/www/html/
+root@conexao:/var/www/conexaomental# sudo systemctl reload nginx
+root@conexao:/var/www/conexaomental# curl -s https://clinicaconexaomental.online | grep -i "planos\|valor único"
+root@conexao:/var/www/conexaomental# ^C
+root@conexao:/var/www/conexaomental# find /var/www -type d -name "html*" 2>/dev/null | head -5
+/var/www/html
+root@conexao:/var/www/conexaomental# find /etc/nginx -name "*.conf" | xargs grep -l "root.*www" | head -2
+root@conexao:/var/www/conexaomental# sudo nginx -T | grep -A 5 -B 5 "root.*www"
+nginx: [warn] conflicting server name "conexaomental.online" on 0.0.0.0:80, ignored
+nginx: [warn] conflicting server name "www.conexaomental.online" on 0.0.0.0:80, ignored
+nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+nginx: configuration file /etc/nginx/nginx.conf test is successful
+server {
+    listen 80;
+    listen [::]:80;
+    server_name conexaomental.online www.conexaomental.online;
+
+    root /var/www/conexaomental;
+    index index.html index.htm;
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+root@conexao:/var/www/conexaomental# ls -la /var/www/conexaomental/dist/assets/ | head -5
+total 1320
+drwxr-xr-x 2 root root    4096 Jul 29 17:52 .
+drwxr-xr-x 4 root root    4096 Jul 29 17:52 ..
+-rw-r--r-- 1 root root   14418 Jul 29 17:52 BookingFlow-BimD4imt.js
+-rw-r--r-- 1 root root     665 Jul 29 17:52 CTASection-BH601FUn.js
+root@conexao:/var/www/conexaomental# sudo cp /var/www/conexaomental/dist/index.html /var/www/html/index.html 2>/dev/null || sudo mkdir -p /var/www/html && sudo cp /var/www/conexaomental/dist/index.html /var/www/html/
+root@conexao:/var/www/conexaomental# curl -s https://clinicaconexaomental.online | grep -o "<title>.*</title>"
+<title>Clínica Conexão Mental - Teleconsultas com Psicólogos e Psiquiatras Online</title>
+root@conexao:/var/www/conexaomental# 

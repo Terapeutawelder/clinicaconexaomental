@@ -1,0 +1,353 @@
+root@conexao:~# pwd
+/root
+root@conexao:~# ls -la
+total 416072
+drwx------ 15 root root      4096 Jul 29 17:06 .
+drwxr-xr-x 18 root root      4096 Jul  2 15:28 ..
+-rw-r--r--  1 root root 424416889 Jul  7 21:43 backup-2025-07-07.tar.gz
+-rw-r--r--  1 root root         0 Jul  6 00:43 backup_n8n_db.backup
+-rw-r--r--  1 root root      1652 Jul  6 00:30 backup_postgresql.sql
+-rw-------  1 root root     80086 Jul 29 17:06 .bash_history
+-rw-r--r--  1 root root      3340 Jul  2 15:28 .bashrc
+drwx------  3 root root      4096 Jul  7 23:33 .cache
+drwxr-xr-x  9 root root      4096 Jul 29 16:03 clinicaconexaomental
+drwxr-xr-x  3 root root      4096 Jul  3 09:17 .config
+drwxr-xr-x  2 root root      4096 Jul  3 12:25 dados_vps
+-rw-r--r--  1 root root      8106 Jul  3 09:34 evolution.yaml
+-rwxr-xr-x  1 root root     20749 Jul  8 18:13 instalacao-postgres15.sh
+-rwxr-xr-x  1 root root         0 Jul  4 15:31 instalacao-postgres15.sh.save
+-rwxr-xr-x  1 root root     21057 Jul  4 15:31 instalacao-rapida.sh
+-rw-------  1 root root       145 Jul  6 00:03 .lesshst
+drwxr-xr-x  3 root root      4096 Jul  3 19:39 .local
+drwxr-xr-x  9 root root      4096 Jul 12 09:36 mental-connect-schedule-56
+-rw-r--r--  1 root root      2106 Jul  3 10:03 minio.yaml
+-rw-r--r--  1 root root      8824 Jul  3 09:50 n8n.yaml
+-rwxr-xr-x  1 root root       685 Jul  7 09:19 nginx-fix.sh
+-rwxr-xr-x  1 root root      1825 Jul  7 10:14 nginx_setup.sh
+drwxr-xr-x  5 root root      4096 Jul  7 23:32 .npm
+drwxr-xr-x  2 root root      4096 Jul  5 21:17 .ollama
+-rwxr-xr-x  1 root root      1447 Jul  6 01:13 ollama_pgsql_fix.py
+-rw-r--r--  1 root root      2226 Jul  3 12:21 ollama.yaml
+-rw-r--r--  1 root root        83 Jul  7 09:49 package-lock.json
+drwxr-xr-x  5 root root      4096 Jul 29 16:24 .pm2
+-rw-r--r--  1 root root      1711 Jul  3 09:26 portainer.yaml
+-rw-r--r--  1 root root      1061 Jul  3 09:33 postgres.yaml
+-rw-r--r--  1 root root       161 Dec  5  2019 .profile
+-rw-------  1 root root      2824 Jul  7 23:30 .psql_history
+-rw-r--r--  1 root root       865 Jul  3 09:49 redis.yaml
+drwxr-xr-x  2 root root      4096 Jul  9 08:52 scripts
+drwxr-xr-x  4 root root      4096 Jul 12 08:55 server
+-rwxr-xr-x  1 root root      2550 Jul  6 20:20 setup_clinica_conexao.sh
+-rwxr-xr-x  1 root root      2058 Jul  7 19:16 setup-completo.sh
+-rwxr-xr-x  1 root root   1223874 Jul  5 18:31 SetupOrion
+drwx------  2 root root      4096 Jul  3 19:35 .ssh
+drwxr-xr-x  3 root root      4096 Jul  3 10:16 supabase
+-rw-r--r--  1 root root     17988 Jul  3 10:58 supabase.yaml
+-rw-r--r--  1 root root      2609 Jul  3 09:24 traefik.yaml
+-rw-r--r--  1 root root     99462 Jul  2 15:31 update.txt
+-rw-r--r--  1 root root       173 Jul 10 15:06 .wget-hsts
+root@conexao:~# ls -la /home/
+total 8
+drwxr-xr-x  2 root root 4096 Apr 15  2020 .
+drwxr-xr-x 18 root root 4096 Jul  2 15:28 ..
+root@conexao:~# ls -la /opt/
+total 20
+drwxr-xr-x  4 root root 4096 Jul  8 00:15 .
+drwxr-xr-x 18 root root 4096 Jul  2 15:28 ..
+drwx--x--x  4 root root 4096 Jul  3 09:21 containerd
+drwxr-xr-x 11 root root 4096 Jul 12 10:58 mental-connect-schedule-56
+-rwxr-xr-x  1 root root 3312 Jul  6 21:56 setup.sh
+root@conexao:~# ls -la /var/www/
+total 20
+drwxr-xr-x  5 root root 4096 Jul 29 16:49 .
+drwxr-xr-x 13 root root 4096 Jul  3 19:41 ..
+drwxr-xr-x 10 root root 4096 Jul 29 16:47 clinicaconexaomental-backup-20250729
+drwxr-xr-x  5 root root 4096 Jul 12 10:59 conexaomental
+drwxr-xr-x  2 root root 4096 Jul  3 19:41 html
+root@conexao:~# cd /var/www/conexaomental
+root@conexao:/var/www/conexaomental# git status
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes not staged for commit:
+  (use "git add/rm <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        deleted:    README.md
+        deleted:    components.json
+        deleted:    downloads/.env
+        deleted:    downloads/DADOS_PERSONALIZACAO.md
+        deleted:    downloads/README.md
+        deleted:    downloads/comandos-terminal.md
+        deleted:    downloads/ecosystem.config.js
+        deleted:    downloads/guia-instalacao-vps.md
+        deleted:    downloads/instalacao-postgres15.sh
+        deleted:    downloads/instalacao-rapida.sh
+        deleted:    downloads/install-api.sh
+        deleted:    downloads/nginx-site.conf
+        deleted:    downloads/package.json
+        deleted:    downloads/server.js
+        deleted:    eslint.config.js
+        modified:   index.html
+        deleted:    package-lock.json
+        deleted:    package.json
+        deleted:    postcss.config.js
+        deleted:    public/favicon.png
+        deleted:    public/lovable-uploads/1c4653a3-9aa5-49a8-8b1a-7e182d51255e.png
+        deleted:    public/lovable-uploads/965e2c23-9c1b-43be-8a98-ac222fc29184.png
+        deleted:    public/lovable-uploads/e24263e0-8b4c-43e9-a547-e4ec838ddd03.png
+        deleted:    public/manifest.json
+        deleted:    public/placeholder.svg
+        deleted:    public/robots.txt
+        deleted:    scripts/README.md
+        deleted:    scripts/backup-db.sh
+        deleted:    scripts/conexao-mental-stack.yml
+        deleted:    scripts/docker-compose.yml
+        deleted:    scripts/init-database.sh
+        deleted:    scripts/install-server.sh
+        deleted:    scripts/migrate-to-contabo.sql
+        deleted:    scripts/setup-cron.sh
+        deleted:    scripts/setup-database.sql
+        deleted:    server/.env
+        deleted:    server/.env.example
+        deleted:    server/README.md
+        deleted:    server/ecosystem.config.js
+        deleted:    server/install.sh
+        deleted:    server/package.json
+        deleted:    server/scripts/setup-database.js
+        deleted:    server/server.js
+        deleted:    src/App.css
+        deleted:    src/App.tsx
+        deleted:    src/assets/logo-new.png
+        deleted:    src/assets/logo-transparent.png
+        deleted:    src/assets/logo.png
+        deleted:    src/components/AgendaSummary.tsx
+        deleted:    src/components/AppointmentCard.tsx
+        deleted:    src/components/AppointmentsSection.tsx
+        deleted:    src/components/BookingFlow.tsx
+        deleted:    src/components/ErrorBoundary.tsx
+        deleted:    src/components/Footer.tsx
+        deleted:    src/components/Header.tsx
+        deleted:    src/components/ProfessionalCard.tsx
+        deleted:    src/components/ProfessionalForm/AddressForm.tsx
+        deleted:    src/components/ProfessionalForm/PersonalDataForm.tsx
+        deleted:    src/components/ProfessionalForm/ProfessionalDataForm.tsx
+        deleted:    src/components/ProfessionalForm/ScheduleForm.tsx
+        deleted:    src/components/ProfessionalForm/TermsAcceptance.tsx
+        deleted:    src/components/ProfessionalRegistrationForm.tsx
+        deleted:    src/components/ReferralSection.tsx
+        deleted:    src/components/ServerStatus.tsx
+        deleted:    src/components/VideoCall.tsx
+        deleted:    src/components/VideoCall/VideoCallChat.tsx
+        deleted:    src/components/VideoCall/VideoCallControls.tsx
+        deleted:    src/components/VideoCall/VideoCallHeader.tsx
+        deleted:    src/components/VideoCall/VideoCallInterface.tsx
+        deleted:    src/components/VideoCall/VideoCallSettings.tsx
+        deleted:    src/components/VideoCall/VideoCallStream.tsx
+        deleted:    src/components/admin/AdminAppointments.tsx
+        deleted:    src/components/admin/AdminPatients.tsx
+        deleted:    src/components/admin/AdminProfessionals.tsx
+        deleted:    src/components/admin/AdminRecordings.tsx
+        deleted:    src/components/admin/AdminReports.tsx
+        deleted:    src/components/auth/ProtectedRoute.tsx
+        deleted:    src/components/sections/BannerSection.tsx
+        deleted:    src/components/sections/CTASection.tsx
+        deleted:    src/components/sections/FeaturesSection.tsx
+        deleted:    src/components/sections/HeroSection.tsx
+        deleted:    src/components/sections/OnlineTherapySection.tsx
+        deleted:    src/components/sections/ProfessionalsSection.tsx
+        deleted:    src/components/sections/SearchSection.tsx
+        deleted:    src/components/ui/accordion.tsx
+        deleted:    src/components/ui/alert-dialog.tsx
+        deleted:    src/components/ui/alert.tsx
+        deleted:    src/components/ui/aspect-ratio.tsx
+        deleted:    src/components/ui/avatar.tsx
+        deleted:    src/components/ui/badge.tsx
+        deleted:    src/components/ui/breadcrumb.tsx
+        deleted:    src/components/ui/button.tsx
+        deleted:    src/components/ui/calendar.tsx
+        deleted:    src/components/ui/card.tsx
+        deleted:    src/components/ui/carousel.tsx
+        deleted:    src/components/ui/chart.tsx
+        deleted:    src/components/ui/checkbox.tsx
+        deleted:    src/components/ui/collapsible.tsx
+        deleted:    src/components/ui/command.tsx
+        deleted:    src/components/ui/context-menu.tsx
+        deleted:    src/components/ui/dialog.tsx
+        deleted:    src/components/ui/drawer.tsx
+        deleted:    src/components/ui/dropdown-menu.tsx
+        deleted:    src/components/ui/form.tsx
+        deleted:    src/components/ui/hover-card.tsx
+        deleted:    src/components/ui/input-otp.tsx
+        deleted:    src/components/ui/input.tsx
+        deleted:    src/components/ui/label.tsx
+        deleted:    src/components/ui/loading-spinner.tsx
+        deleted:    src/components/ui/menubar.tsx
+        deleted:    src/components/ui/navigation-menu.tsx
+        deleted:    src/components/ui/pagination.tsx
+        deleted:    src/components/ui/popover.tsx
+        deleted:    src/components/ui/progress.tsx
+        deleted:    src/components/ui/radio-group.tsx
+        deleted:    src/components/ui/resizable.tsx
+        deleted:    src/components/ui/scroll-area.tsx
+        deleted:    src/components/ui/section-skeleton.tsx
+        deleted:    src/components/ui/select.tsx
+        deleted:    src/components/ui/separator.tsx
+        deleted:    src/components/ui/sheet.tsx
+        deleted:    src/components/ui/sidebar.tsx
+        deleted:    src/components/ui/skeleton.tsx
+        deleted:    src/components/ui/slider.tsx
+        deleted:    src/components/ui/sonner.tsx
+        deleted:    src/components/ui/switch.tsx
+        deleted:    src/components/ui/table.tsx
+        deleted:    src/components/ui/tabs.tsx
+        deleted:    src/components/ui/textarea.tsx
+        deleted:    src/components/ui/toast.tsx
+        deleted:    src/components/ui/toaster.tsx
+        deleted:    src/components/ui/toggle-group.tsx
+        deleted:    src/components/ui/toggle.tsx
+        deleted:    src/components/ui/tooltip.tsx
+        deleted:    src/components/ui/use-toast.ts
+        deleted:    src/components/whatsapp/WhatsAppNotifications.tsx
+        deleted:    src/contexts/AuthContext.tsx
+        deleted:    src/hooks/use-mobile.tsx
+        deleted:    src/hooks/use-toast.ts
+        deleted:    src/hooks/useMediaRecording.ts
+        deleted:    src/hooks/useRateLimit.ts
+        deleted:    src/hooks/useSecureDatabase.ts
+        deleted:    src/hooks/useVideoCall.ts
+        deleted:    src/hooks/useWhatsAppNotifications.ts
+        deleted:    src/index.css
+        deleted:    src/integrations/supabase/client.ts
+        deleted:    src/integrations/supabase/types.ts
+        deleted:    src/lib/utils.ts
+        deleted:    src/lib/validationSchemas.ts
+        deleted:    src/main.tsx
+        deleted:    src/pages/AdminDashboard.tsx
+        deleted:    src/pages/Afiliados.tsx
+        deleted:    src/pages/AgendarConsulta.tsx
+        deleted:    src/pages/Auth.tsx
+        deleted:    src/pages/ComoFunciona.tsx
+        deleted:    src/pages/ConfirmacaoAgendamento.tsx
+        deleted:    src/pages/Contato.tsx
+        deleted:    src/pages/Contrato.tsx
+        deleted:    src/pages/FinalizarAgendamento.tsx
+        deleted:    src/pages/Index.tsx
+        deleted:    src/pages/Login.tsx
+        deleted:    src/pages/LoginPaciente.tsx
+        deleted:    src/pages/NotFound.tsx
+        deleted:    src/pages/PoliticaDePrivacidade.tsx
+        deleted:    src/pages/ProfessionalAgenda.tsx
+        deleted:    src/pages/ProfessionalRegistration.tsx
+        deleted:    src/pages/SobreNos.tsx
+        deleted:    src/pages/TermosDeUso.tsx
+        deleted:    src/pages/VideoConsultation.tsx
+        deleted:    src/utils/appointmentStorage.ts
+        deleted:    src/utils/backgroundRemoval.ts
+        deleted:    src/utils/formValidation.ts
+        deleted:    src/utils/processCurrentLogo.ts
+        deleted:    src/utils/processLogo.ts
+        deleted:    src/vite-env.d.ts
+        deleted:    supabase/config.toml
+        deleted:    supabase/migrations/20250702171349-7c0818ab-b9b5-4980-bbdd-ef7f221681ae.sql
+        deleted:    supabase/migrations/20250702174029-22a4a8f3-483c-4adc-ad19-c0c827d448e2.sql
+        deleted:    supabase/migrations/20250702174923-b4af025e-f78f-420c-a805-558ef9650f19.sql
+        deleted:    supabase/migrations/20250702175207-444583dd-db75-43f2-b5cb-55c7ff845b5b.sql
+        deleted:    supabase/migrations/20250702175242-61a64a32-12c1-4daa-acf0-0944c382bdde.sql
+        deleted:    supabase/migrations/20250702212337-d9568345-a413-49a4-9bd5-219e5f86506f.sql
+        deleted:    tailwind.config.ts
+        deleted:    tsconfig.app.json
+        deleted:    tsconfig.json
+        deleted:    tsconfig.node.json
+        deleted:    vite.config.ts
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        assets/
+        favicon.png
+        lovable-uploads/
+        manifest.json
+        placeholder.svg
+        robots.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")
+root@conexao:/var/www/conexaomental# cp .env ~/.env-backup
+cp: cannot stat '.env': No such file or directory
+root@conexao:/var/www/conexaomental# git pull origin main
+remote: Enumerating objects: 7, done.
+remote: Counting objects: 100% (7/7), done.
+remote: Compressing objects: 100% (5/5), done.
+remote: Total 5 (delta 1), reused 0 (delta 0), pack-reused 0 (from 0)
+Unpacking objects: 100% (5/5), 12.20 KiB | 2.44 MiB/s, done.
+From https://github.com/Terapeutawelder/mental-connect-schedule-56
+ * branch            main       -> FETCH_HEAD
+   1b23623..c816b7b  main       -> origin/main
+Updating 1b23623..c816b7b
+Fast-forward
+ README.md         | 170 ++++++++++++++++++++++++++++++++++++-------------
+ projeto_resumo.md |  45 +++++++++++++
+ replit.md         | 429 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 600 insertions(+), 44 deletions(-)
+ create mode 100644 projeto_resumo.md
+ create mode 100644 replit.md
+root@conexao:/var/www/conexaomental# cp ~/.env-backup .env
+cp: cannot stat '/root/.env-backup': No such file or directory
+root@conexao:/var/www/conexaomental# cp .env ~/.env-backup
+cp: cannot stat '.env': No such file or directory
+root@conexao:/var/www/conexaomental# git init
+Reinitialized existing Git repository in /var/www/conexaomental/.git/
+root@conexao:/var/www/conexaomental# git remote add origin https://github.com/Terapeutawelder/mental-connect-schedule-56.git
+fatal: remote origin already exists.
+root@conexao:/var/www/conexaomental# git fetch origin
+root@conexao:/var/www/conexaomental# git reset --hard origin/main
+HEAD is now at c816b7b "Documentação sistema telemedicina"
+root@conexao:/var/www/conexaomental# cp ~/.env-backup .env
+cp: cannot stat '/root/.env-backup': No such file or directory
+root@conexao:/var/www/conexaomental# npm install
+npm warn deprecated boolean@3.2.0: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
+
+added 469 packages, and audited 470 packages in 46s
+
+87 packages are looking for funding
+  run `npm fund` for details
+
+7 vulnerabilities (3 low, 4 moderate)
+
+To address all issues, run:
+  npm audit fix
+
+Run `npm audit` for details.
+root@conexao:/var/www/conexaomental# npm run build
+
+> vite_react_shadcn_ts@0.0.0 build
+> vite build
+
+vite v5.4.10 building for production...
+transforming (1) index.htmlBrowserslist: browsers data (caniuse-lite) is 10 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+✓ 3561 modules transformed.
+dist/index.html                                   5.40 kB │ gzip:   1.69 kB
+dist/assets/index-ANRZSTN1.css                   74.70 kB │ gzip:  12.58 kB
+dist/assets/CTASection-BH601FUn.js                0.66 kB │ gzip:   0.43 kB
+dist/assets/SearchSection-Ho2h4k2G.js             0.91 kB │ gzip:   0.47 kB
+dist/assets/OnlineTherapySection-C42C85Ho.js      1.48 kB │ gzip:   0.64 kB
+dist/assets/FeaturesSection-D3PF5InE.js           1.86 kB │ gzip:   0.95 kB
+dist/assets/ProfessionalsSection-CcH8eJW_.js      3.22 kB │ gzip:   1.11 kB
+dist/assets/BookingFlow-BimD4imt.js              14.35 kB │ gzip:   4.55 kB
+dist/assets/index-BzKd26S_.js                 1,224.56 kB │ gzip: 343.99 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 28.07s
+root@conexao:/var/www/conexaomental# pm2 restart conexaomental
+Use --update-env to update environment variables
+[PM2] Applying action restartProcessId on app [conexaomental](ids: [ 0 ])
+[PM2] [conexaomental](0) ✓
+┌────┬──────────────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name             │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+├────┼──────────────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
+│ 0  │ conexaomental    │ default     │ N/A     │ fork    │ 3661919  │ 0s     │ 15   │ online    │ 0%       │ 34.3mb   │ root     │ disabled │
+└────┴──────────────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+root@conexao:/var/www/conexaomental# 
