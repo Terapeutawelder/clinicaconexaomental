@@ -1,0 +1,398 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
+
+@layer base {
+  :root {
+    /* Dark theme - Default */
+    --background: 215 30% 10%;
+    --foreground: 0 0% 100%;
+
+    --card: 215 30% 12%;
+    --card-foreground: 0 0% 100%;
+
+    --popover: 215 30% 12%;
+    --popover-foreground: 0 0% 100%;
+
+    --primary: 262 83% 58%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 215 30% 15%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 215 20% 20%;
+    --muted-foreground: 215 10% 65%;
+
+    --accent: 262 83% 58%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 215 20% 20%;
+    --input: 215 20% 20%;
+    --ring: 262 83% 58%;
+
+    --radius: 0.75rem;
+
+    /* Custom tokens */
+    --hero-overlay: 215 30% 12%;
+    --marquee-bg: 25 95% 53%;
+    --glow-primary: 262 83% 58%;
+    
+    /* Pro page dark theme tokens */
+    --pro-background: 215 30% 15%;
+    --pro-foreground: 0 0% 100%;
+    --pro-card: 215 30% 18%;
+    --pro-muted: 215 20% 25%;
+    --pro-muted-foreground: 215 10% 70%;
+
+    /* Psico Space theme tokens */
+    --teal: 168 45% 35%;
+    --teal-light: 168 30% 92%;
+    --teal-dark: 168 50% 25%;
+    --sand: 45 30% 90%;
+    --sand-dark: 45 20% 75%;
+    --gold: 45 60% 50%;
+    --gold-light: 45 40% 92%;
+    --cream: 40 25% 97%;
+    --charcoal: 220 20% 18%;
+    --slate: 220 15% 35%;
+
+    /* Psico Space gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(168 45% 35%), hsl(168 50% 25%));
+    --gradient-accent: linear-gradient(135deg, hsl(45 60% 50%), hsl(45 50% 40%));
+    --gradient-warm: linear-gradient(135deg, hsl(168 45% 35%), hsl(45 60% 50%));
+    --gradient-hero: linear-gradient(180deg, hsl(40 20% 98%) 0%, hsl(168 30% 95%) 100%);
+  }
+
+  .dark {
+    --background: 215 30% 10%;
+    --foreground: 0 0% 100%;
+
+    --card: 215 30% 12%;
+    --card-foreground: 0 0% 100%;
+
+    --popover: 215 30% 12%;
+    --popover-foreground: 0 0% 100%;
+
+    --primary: 262 83% 58%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 215 30% 15%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 215 20% 20%;
+    --muted-foreground: 215 10% 65%;
+
+    --accent: 262 83% 58%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 215 20% 20%;
+    --input: 215 20% 20%;
+    --ring: 262 83% 58%;
+
+    --teal: 168 40% 45%;
+    --teal-light: 168 30% 20%;
+    --teal-dark: 168 45% 35%;
+    --sand: 45 20% 20%;
+    --sand-dark: 45 15% 30%;
+    --gold: 45 55% 55%;
+    --gold-light: 45 30% 20%;
+    --cream: 220 20% 15%;
+    --charcoal: 220 15% 85%;
+    --slate: 220 10% 65%;
+
+    --gradient-primary: linear-gradient(135deg, hsl(168 40% 45%), hsl(168 45% 35%));
+    --gradient-accent: linear-gradient(135deg, hsl(45 55% 55%), hsl(45 45% 45%));
+    --gradient-warm: linear-gradient(135deg, hsl(168 40% 45%), hsl(45 55% 55%));
+    --gradient-hero: linear-gradient(180deg, hsl(220 25% 8%) 0%, hsl(220 20% 12%) 100%);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'Poppins', sans-serif;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent;
+  }
+
+  .glow-primary {
+    box-shadow: 0 0 40px hsl(var(--glow-primary) / 0.4);
+  }
+
+  .hero-gradient {
+    background: linear-gradient(
+      180deg,
+      hsl(var(--hero-overlay) / 0.7) 0%,
+      hsl(var(--hero-overlay) / 0.85) 100%
+    );
+  }
+}
+
+/* Pro theme for professionals page - Dark bluish with purple/lilac accents */
+/* Admin theme - Always dark for Super Admin panel */
+.admin-theme {
+  --background: 215 25% 12%;
+  --foreground: 0 0% 100%;
+  --card: 215 25% 15%;
+  --card-foreground: 0 0% 100%;
+  --popover: 215 25% 15%;
+  --popover-foreground: 0 0% 100%;
+  --muted: 215 20% 20%;
+  --muted-foreground: 215 10% 70%;
+  --border: 215 20% 25%;
+  --input: 215 20% 25%;
+  --primary: 262 83% 58%;
+  --primary-foreground: 0 0% 100%;
+  --accent: 262 83% 58%;
+  --accent-foreground: 0 0% 100%;
+  --ring: 262 83% 58%;
+}
+
+/* Force text color in admin inputs */
+.admin-theme input,
+.admin-theme textarea {
+  color: hsl(0 0% 100%) !important;
+  -webkit-text-fill-color: hsl(0 0% 100%) !important;
+}
+
+.admin-theme input::placeholder,
+.admin-theme textarea::placeholder {
+  color: hsl(215 10% 50%) !important;
+  -webkit-text-fill-color: hsl(215 10% 50%) !important;
+}
+
+.admin-theme input:-webkit-autofill,
+.admin-theme input:-webkit-autofill:hover,
+.admin-theme input:-webkit-autofill:focus,
+.admin-theme textarea:-webkit-autofill {
+  -webkit-text-fill-color: hsl(0 0% 100%) !important;
+  -webkit-box-shadow: 0 0 0px 1000px hsl(215 25% 20%) inset !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+.pro-theme {
+  --background: 215 35% 14%;
+  --foreground: 0 0% 100%;
+  --card: 215 35% 18%;
+  --card-foreground: 0 0% 100%;
+  --muted: 215 25% 22%;
+  --muted-foreground: 215 15% 75%;
+  --border: 215 25% 25%;
+  --primary: 262 83% 58%;
+  --primary-foreground: 0 0% 100%;
+  --accent: 262 83% 58%;
+  --accent-foreground: 0 0% 100%;
+  --ring: 262 83% 58%;
+  --marquee-bg: 25 95% 53%;
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+}
+
+/* Dashboard theme - supports Light/Dark via .dark on <html> */
+.dashboard-theme {
+  /* Light dashboard (uses same brand accents, brighter surfaces) */
+  --background: 220 30% 97%;
+  --foreground: 220 35% 14%;
+  --card: 0 0% 100%;
+  --card-foreground: 220 35% 14%;
+  --muted: 220 20% 92%;
+  --muted-foreground: 220 10% 45%;
+  --border: 220 15% 85%;
+  --primary: 262 83% 58%;
+  --primary-foreground: 0 0% 100%;
+  --accent: 262 83% 65%;
+  --accent-foreground: 0 0% 100%;
+  --ring: 262 83% 58%;
+
+  /* Dashboard neon tokens */
+  --dashboard-neon: 262 83% 58%;
+  --dashboard-neon-glow: 262 100% 70%;
+  --dashboard-card-purple: 262 83% 58%;
+  --dashboard-card-green: 145 70% 45%;
+  --dashboard-card-blue: 200 80% 50%;
+  --dashboard-card-orange: 25 100% 55%;
+
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+}
+
+.dark .dashboard-theme {
+  /* Dark dashboard (original) */
+  --background: 220 20% 10%;
+  --foreground: 0 0% 100%;
+  --card: 220 20% 14%;
+  --card-foreground: 0 0% 100%;
+  --muted: 220 15% 18%;
+  --muted-foreground: 220 10% 60%;
+  --border: 220 15% 20%;
+  --primary: 262 83% 58%;
+  --primary-foreground: 0 0% 100%;
+  --accent: 262 83% 65%;
+  --accent-foreground: 0 0% 100%;
+  --ring: 262 83% 58%;
+
+  /* Dashboard neon tokens */
+  --dashboard-neon: 262 83% 58%;
+  --dashboard-neon-glow: 262 100% 70%;
+  --dashboard-card-purple: 262 83% 58%;
+  --dashboard-card-green: 145 70% 45%;
+  --dashboard-card-blue: 200 80% 50%;
+  --dashboard-card-orange: 25 100% 55%;
+}
+
+/* Dashboard neon hover effects */
+.dashboard-card-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dashboard-card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 0 30px hsl(var(--dashboard-neon) / 0.4);
+}
+
+.neon-glow {
+  box-shadow: 0 0 20px hsl(var(--dashboard-neon) / 0.3),
+              0 0 40px hsl(var(--dashboard-neon) / 0.15);
+}
+
+.neon-border {
+  border: 1px solid hsl(var(--dashboard-neon) / 0.3);
+}
+
+.neon-border:hover {
+  border-color: hsl(var(--dashboard-neon) / 0.6);
+  box-shadow: 0 0 20px hsl(var(--dashboard-neon) / 0.2);
+}
+
+/* Preview Light Theme - Isolates landing page preview from dashboard dark theme */
+.preview-light-theme {
+  --background: 40 25% 97%;
+  --foreground: 220 20% 18%;
+  --card: 0 0% 100%;
+  --card-foreground: 220 20% 18%;
+  --muted: 40 15% 94%;
+  --muted-foreground: 220 10% 45%;
+  --border: 220 15% 85%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 220 20% 18%;
+  
+  /* Reset Psico Space tokens to light versions */
+  --teal: 168 45% 35%;
+  --teal-light: 168 30% 92%;
+  --teal-dark: 168 50% 25%;
+  --sand: 45 30% 90%;
+  --sand-dark: 45 20% 75%;
+  --gold: 45 60% 50%;
+  --gold-light: 45 40% 92%;
+  --cream: 40 25% 97%;
+  --charcoal: 220 20% 18%;
+  --slate: 220 15% 35%;
+  
+  background-color: hsl(var(--cream)) !important;
+  color: hsl(var(--charcoal)) !important;
+}
+
+@layer components {
+  .btn-whatsapp {
+    @apply inline-flex items-center justify-center gap-3 px-8 py-4 text-lg font-semibold 
+           bg-primary text-primary-foreground rounded-full transition-all duration-300 
+           hover:scale-105 hover:shadow-xl glow-primary;
+  }
+
+  .marquee-container {
+    @apply bg-marquee overflow-hidden py-3;
+  }
+
+  .marquee-content {
+    @apply flex gap-8 animate-marquee whitespace-nowrap;
+  }
+}
+
+/* Marquee animation */
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 25s linear infinite;
+}
+
+/* Fade in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+.animate-delay-100 {
+  animation-delay: 0.1s;
+}
+
+.animate-delay-200 {
+  animation-delay: 0.2s;
+}
+
+.animate-delay-300 {
+  animation-delay: 0.3s;
+}
+
+.animate-delay-400 {
+  animation-delay: 0.4s;
+}
+
+/* Pulse animation for CTA */
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px hsl(var(--primary) / 0.4);
+  }
+  50% {
+    box-shadow: 0 0 40px hsl(var(--primary) / 0.6);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}

@@ -1,0 +1,58 @@
+project_id = "dctapmbdsfmzhtbpgigc"
+
+[functions.gateway-payment]
+verify_jwt = false
+
+[functions.send-appointment-notification]
+verify_jwt = false
+
+[functions.mercadopago-payment]
+verify_jwt = false
+
+[functions.validate-gateway]
+verify_jwt = false
+
+[functions.payment-webhook]
+verify_jwt = false
+
+[functions.ai-assistant]
+verify_jwt = false
+
+[functions.send-appointment-reminders]
+verify_jwt = false
+
+[functions.ai-psi-analysis]
+verify_jwt = false
+
+[functions.create-appointment]
+verify_jwt = false
+
+[functions.get-client-appointment]
+verify_jwt = false
+
+[functions.metered-webhook]
+verify_jwt = false
+
+[functions.get-turn-credentials]
+verify_jwt = false
+
+[functions.google-calendar-auth]
+verify_jwt = false
+
+[functions.google-calendar-sync]
+verify_jwt = false
+
+[functions.dispatch-webhook]
+verify_jwt = false
+
+[functions.remove-background]
+verify_jwt = false
+
+[functions.ai-dashboard-assistant]
+verify_jwt = false
+
+[functions.whatsapp-manager]
+verify_jwt = false
+
+[functions.admin-notifications]
+verify_jwt = false
