@@ -1,0 +1,231 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
+
+@layer base {
+  :root {
+    /* Light theme - Mint/Aqua inspired */
+    --background: 170 40% 96%;
+    --foreground: 215 50% 23%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 215 50% 23%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 215 50% 23%;
+
+    --primary: 262 83% 58%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 170 30% 90%;
+    --secondary-foreground: 215 50% 23%;
+
+    --muted: 170 20% 92%;
+    --muted-foreground: 215 20% 50%;
+
+    --accent: 170 60% 40%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 170 20% 88%;
+    --input: 170 20% 88%;
+    --ring: 262 83% 58%;
+
+    --radius: 0.75rem;
+
+    /* Custom tokens */
+    --hero-overlay: 215 30% 12%;
+    --marquee-bg: 262 83% 58%;
+    --glow-primary: 262 83% 58%;
+    
+    /* Pro page dark theme tokens */
+    --pro-background: 215 30% 15%;
+    --pro-foreground: 0 0% 100%;
+    --pro-card: 215 30% 18%;
+    --pro-muted: 215 20% 25%;
+    --pro-muted-foreground: 215 10% 70%;
+  }
+
+  .dark {
+    --background: 215 30% 10%;
+    --foreground: 0 0% 100%;
+
+    --card: 215 30% 12%;
+    --card-foreground: 0 0% 100%;
+
+    --popover: 215 30% 12%;
+    --popover-foreground: 0 0% 100%;
+
+    --primary: 262 83% 58%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 215 30% 15%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 215 20% 20%;
+    --muted-foreground: 215 10% 65%;
+
+    --accent: 262 83% 58%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 215 20% 20%;
+    --input: 215 20% 20%;
+    --ring: 262 83% 58%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'Poppins', sans-serif;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent;
+  }
+
+  .glow-primary {
+    box-shadow: 0 0 40px hsl(var(--glow-primary) / 0.4);
+  }
+
+  .hero-gradient {
+    background: linear-gradient(
+      180deg,
+      hsl(var(--hero-overlay) / 0.7) 0%,
+      hsl(var(--hero-overlay) / 0.85) 100%
+    );
+  }
+}
+
+/* Pro theme for professionals page - Dark bluish with purple/lilac accents */
+.pro-theme {
+  --background: 215 35% 14%;
+  --foreground: 0 0% 100%;
+  --card: 215 35% 18%;
+  --card-foreground: 0 0% 100%;
+  --muted: 215 25% 22%;
+  --muted-foreground: 215 15% 75%;
+  --border: 215 25% 25%;
+  --primary: 262 83% 58%;
+  --primary-foreground: 0 0% 100%;
+  --accent: 262 83% 58%;
+  --accent-foreground: 0 0% 100%;
+  --ring: 262 83% 58%;
+  --marquee-bg: 262 83% 58%;
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+}
+
+/* Dashboard theme - Dark navy like Meta dashboard */
+.dashboard-theme {
+  --background: 215 40% 8%;
+  --foreground: 0 0% 100%;
+  --card: 215 40% 12%;
+  --card-foreground: 0 0% 100%;
+  --muted: 215 30% 16%;
+  --muted-foreground: 210 15% 65%;
+  --border: 215 30% 18%;
+  --primary: 262 83% 58%;
+  --primary-foreground: 0 0% 100%;
+  --accent: 200 100% 50%;
+  --accent-foreground: 0 0% 100%;
+  --ring: 262 83% 58%;
+  
+  /* Dashboard-specific tokens */
+  --dashboard-card-blue: 200 80% 50%;
+  --dashboard-card-green: 145 70% 45%;
+  --dashboard-card-yellow: 45 100% 55%;
+  --dashboard-card-red: 0 75% 55%;
+  
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+}
+
+@layer components {
+  .btn-whatsapp {
+    @apply inline-flex items-center justify-center gap-3 px-8 py-4 text-lg font-semibold 
+           bg-primary text-primary-foreground rounded-full transition-all duration-300 
+           hover:scale-105 hover:shadow-xl glow-primary;
+  }
+
+  .marquee-container {
+    @apply bg-marquee overflow-hidden py-3;
+  }
+
+  .marquee-content {
+    @apply flex gap-8 animate-marquee whitespace-nowrap;
+  }
+}
+
+/* Marquee animation */
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 25s linear infinite;
+}
+
+/* Fade in animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+.animate-delay-100 {
+  animation-delay: 0.1s;
+}
+
+.animate-delay-200 {
+  animation-delay: 0.2s;
+}
+
+.animate-delay-300 {
+  animation-delay: 0.3s;
+}
+
+.animate-delay-400 {
+  animation-delay: 0.4s;
+}
+
+/* Pulse animation for CTA */
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px hsl(var(--primary) / 0.4);
+  }
+  50% {
+    box-shadow: 0 0 40px hsl(var(--primary) / 0.6);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}

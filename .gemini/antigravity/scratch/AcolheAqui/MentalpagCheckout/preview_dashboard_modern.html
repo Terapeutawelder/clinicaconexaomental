@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Moderno - Mentalpag</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+
+        .dark body {
+            background-color: #0f172a;
+            color: #f8fafc;
+        }
+    </style>
+</head>
+
+<body class="transition-colors duration-300">
+
+    <!-- Mock Layout -->
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar Completa (Mock Igual ao index.php) -->
+        <div
+            class="hidden md:flex w-64 flex-col bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 overflow-y-auto">
+            <div class="p-6">
+                <!-- Logo Mock -->
+                <div class="flex items-center gap-2 text-emerald-600 dark:text-emerald-500">
+                    <img src="assets/logo.png" onerror="this.src='https://via.placeholder.com/40'" class="h-8 w-auto">
+                    <span class="text-xl font-bold">Mentalpag</span>
+                </div>
+            </div>
+            <nav class="flex-1 px-4 space-y-1 pb-4">
+                <a href="#"
+                    class="flex items-center gap-3 px-4 py-3 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 rounded-lg font-medium">
+                    <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard
+                </a>
+
+                <!-- Minha Agenda (Moved Up) -->
+                <a href="#"
+                    class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors">
+                    <i data-lucide="calendar-range" class="w-5 h-5"></i> Minha Agenda
+                </a>
+                <!-- Minha Página (New) -->
+                <a href="#"
+                    class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors">
+                    <i data-lucide="smartphone" class="w-5 h-5"></i> Minha Página
+                </a>
+
+                <a href="#"
+                    class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors">
+                    <i data-lucide="shopping-cart" class="w-5 h-5"></i> Vendas
+                </a>
+                <a href="#"
+                    class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors">
+                    <i data-lucide="package" class="w-5 h-5"></i> Serviços
+                </a>
+                <a href="#"
+                    class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors">
+                    <i data-lucide="line-chart" class="w-5 h-5"></i> Mentalpag Track
+                </a>
+                <a href="#"
+                    class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors">
+                    <i data-lucide="plug-zap" class="w-5 h-5"></i> Integrações
+                </a>
+
+                <a href="#"
+                    class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors">
+                    <i data-lucide="play-square" class="w-5 h-5"></i> Área de Membros
+                </a>
+
+                <!-- Jornada (Moved Down) -->
+                <a href="#"
+                    class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors">
+                    <i data-lucide="rocket" class="w-5 h-5"></i> Jornada Mentalpag
+                </a>
+
+                <a href="#"
+                    class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors">
+                    <i data-lucide="settings" class="w-5 h-5"></i> Configurações
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <main class="flex-1 overflow-y-auto bg-slate-50 dark:bg-slate-950 p-8">
+
+            <!-- HEADER -->
+            <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+                <div>
+                    <h1
+                        class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-800 dark:from-emerald-400 dark:to-teal-200">
+                        Olá, Dr. Welder! 👋
+                    </h1>
+                    <p class="text-slate-500 dark:text-slate-400 mt-1">Aqui está o resumo da sua clínica hoje.</p>
+                </div>
+
+                <div class="flex items-center gap-4">
+                    <button id="themeToggle"
+                        class="p-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:text-emerald-500 transition-shadow shadow-sm">
+                        <i data-lucide="moon" class="w-5 h-5 block dark:hidden"></i>
+                        <i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i>
+                    </button>
+
+                    <div
+                        class="bg-white dark:bg-slate-800 p-1 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm flex">
+                        <button
+                            class="px-3 py-1.5 text-xs font-semibold rounded-md bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400">Hoje</button>
+                        <button
+                            class="px-3 py-1.5 text-xs font-semibold rounded-md text-slate-500 dark:text-slate-400">Ontem</button>
+                        <button
+                            class="px-3 py-1.5 text-xs font-semibold rounded-md text-slate-500 dark:text-slate-400">7
+                            Dias</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEÇÃO DE KPIS PRINCIPAIS (4 Cards: Agendamentos, Faturamento, Vendas, Ticket) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+
+                <!-- Agendamentos (NOVO CARD) -->
+                <div
+                    class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-100 dark:border-slate-700 relative overflow-hidden group hover:border-emerald-200 dark:hover:border-emerald-700 transition-colors">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-slate-400 font-medium text-sm mb-1 uppercase tracking-wider">Agendamentos</p>
+                            <h3 class="text-3xl font-bold text-slate-800 dark:text-slate-100">4</h3>
+                        </div>
+                        <div
+                            class="p-2 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 rounded-lg h-fit">
+                            <i data-lucide="calendar" class="w-6 h-6"></i>
+                        </div>
+                    </div>
+                    <div class="w-full bg-slate-100 dark:bg-slate-700 h-1.5 mt-4 rounded-full overflow-hidden">
+                        <div class="bg-emerald-500 h-full w-[100%]"></div>
+                    </div>
+                </div>
+
+                <!-- Faturamento -->
+                <div
+                    class="bg-gradient-to-br from-emerald-500 to-teal-600 dark:from-emerald-600 dark:to-teal-800 rounded-2xl p-6 text-white shadow-lg shadow-emerald-200/50 dark:shadow-none relative overflow-hidden">
+                    <div class="absolute -right-6 -top-6 w-24 h-24 bg-white/20 rounded-full blur-2xl"></div>
+                    <div class="relative z-10">
+                        <p class="text-emerald-100 font-medium text-sm mb-1">Faturamento</p>
+                        <h3 class="text-3xl font-bold tracking-tight">R$ 12.450,00</h3>
+                        <div class="mt-4 flex items-center text-xs text-emerald-50 font-medium">
+                            <span class="bg-white/20 px-1.5 py-0.5 rounded mr-2 flex items-center gap-1"><i
+                                    data-lucide="trending-up" class="w-3 h-3"></i> +15%</span> vs. ontem
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Qtd -->
+                <div
+                    class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-100 dark:border-slate-700">
+                    <div class="flex justify-between">
+                        <div>
+                            <p class="text-slate-400 text-sm uppercase font-bold tracking-wider">Vendas</p>
+                            <h3 class="text-3xl font-bold text-slate-800 dark:text-slate-100">142</h3>
+                        </div>
+                        <div class="p-2 bg-blue-50 dark:bg-blue-900/20 text-blue-600 rounded-lg h-fit"><i
+                                data-lucide="shopping-bag" class="w-6 h-6"></i></div>
+                    </div>
+                    <div class="w-full bg-slate-100 dark:bg-slate-700 h-1.5 mt-4 rounded-full overflow-hidden">
+                        <div class="bg-blue-500 h-full w-[70%]"></div>
+                    </div>
+                </div>
+
+                <!-- Ticket -->
+                <div
+                    class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-100 dark:border-slate-700">
+                    <div class="flex justify-between">
+                        <div>
+                            <p class="text-slate-400 text-sm uppercase font-bold tracking-wider">Ticket Médio</p>
+                            <h3 class="text-3xl font-bold text-slate-800 dark:text-slate-100">R$ 87,60</h3>
+                        </div>
+                        <div class="p-2 bg-purple-50 dark:bg-purple-900/20 text-purple-600 rounded-lg h-fit"><i
+                                data-lucide="bar-chart-2" class="w-6 h-6"></i></div>
+                    </div>
+                    <div class="w-full bg-slate-100 dark:bg-slate-700 h-1.5 mt-4 rounded-full overflow-hidden">
+                        <div class="bg-purple-500 h-full w-[45%]"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEÇÃO 3: MÉTRICAS SECUNDÁRIAS -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                <div
+                    class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-orange-100 dark:border-slate-700 shadow-sm flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-bold text-orange-400 uppercase">Pendentes</p>
+                        <h4 class="text-xl font-bold text-slate-700 dark:text-slate-200">R$ 1.290,00</h4>
+                        <p class="text-[10px] text-slate-400">5 transações</p>
+                    </div>
+                    <div
+                        class="w-10 h-10 rounded-full bg-orange-50 dark:bg-orange-900/20 flex items-center justify-center text-orange-500">
+                        <i data-lucide="clock" class="w-5 h-5"></i>
+                    </div>
+                </div>
+                <div
+                    class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-bold text-slate-400 uppercase">Abandonos</p>
+                        <h4 class="text-xl font-bold text-slate-700 dark:text-slate-200">23</h4>
+                    </div>
+                    <div
+                        class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-500">
+                        <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+                    </div>
+                </div>
+                <div
+                    class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-red-100 dark:border-slate-700 shadow-sm flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-bold text-red-400 uppercase">Reembolsos</p>
+                        <h4 class="text-xl font-bold text-slate-700 dark:text-slate-200">R$ 197,00</h4>
+                    </div>
+                    <div
+                        class="w-10 h-10 rounded-full bg-red-50 dark:bg-red-900/20 flex items-center justify-center text-red-500">
+                        <i data-lucide="rotate-ccw" class="w-5 h-5"></i>
+                    </div>
+                </div>
+                <div
+                    class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-bold text-slate-400 uppercase">Chargebacks</p>
+                        <h4 class="text-xl font-bold text-slate-700 dark:text-slate-200">R$ 0,00</h4>
+                    </div>
+                    <div
+                        class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-500">
+                        <i data-lucide="alert-triangle" class="w-5 h-5"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEÇÃO 4: GRÁFICO + BREAKDOWN -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Chart -->
+                <div
+                    class="lg:col-span-2 bg-white dark:bg-slate-800 rounded-2xl shadow-lg shadow-slate-200/50 dark:shadow-none p-6 border border-slate-100 dark:border-slate-700">
+                    <h4 class="text-lg font-bold text-slate-800 dark:text-slate-100 mb-6 flex items-center gap-2"><span
+                            class="w-1.5 h-6 bg-emerald-500 rounded-full"></span> Performance</h4>
+                    <div id="salesChart" class="w-full h-[300px]"></div>
+                </div>
+                <!-- Breakdown -->
+                <div
+                    class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6">
+                    <h4 class="text-lg font-bold text-slate-800 dark:text-slate-100 mb-6">Por Método</h4>
+                    <div class="space-y-6">
+                        <div>
+                            <div class="flex justify-between text-sm mb-1"><span
+                                    class="font-bold text-emerald-600 flex gap-2"><i data-lucide="zap"
+                                        class="w-4 h-4"></i> Pix</span> <span class="dark:text-slate-300">R$
+                                    8.400</span></div>
+                            <div class="w-full bg-slate-100 dark:bg-slate-700 h-2 rounded-full">
+                                <div class="bg-emerald-500 h-full w-[70%]"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-sm mb-1"><span
+                                    class="font-bold text-blue-600 flex gap-2"><i data-lucide="credit-card"
+                                        class="w-4 h-4"></i> Cartão</span> <span class="dark:text-slate-300">R$
+                                    3.200</span></div>
+                            <div class="w-full bg-slate-100 dark:bg-slate-700 h-2 rounded-full">
+                                <div class="bg-blue-500 h-full w-[25%]"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-sm mb-1"><span
+                                    class="font-bold text-slate-500 flex gap-2"><i data-lucide="barcode"
+                                        class="w-4 h-4"></i> Boleto</span> <span class="dark:text-slate-300">R$
+                                    850</span></div>
+                            <div class="w-full bg-slate-100 dark:bg-slate-700 h-2 rounded-full">
+                                <div class="bg-slate-400 h-full w-[5%]"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        // Config Chart
+        const isDark = document.documentElement.classList.contains('dark');
+        const options = {
+            chart: { type: 'area', height: 300, toolbar: { show: false }, background: 'transparent', fontFamily: 'Inter' },
+            series: [{ name: 'Vendas', data: [1200, 1900, 3000, 2500, 3200, 4000, 3800] }],
+            colors: ['#10b981'],
+            stroke: { curve: 'smooth', width: 3 },
+            fill: { type: 'gradient', gradient: { shadeIntensity: 1, opacityFrom: 0.7, opacityTo: 0.1, stops: [0, 90, 100] } },
+            dataLabels: { enabled: false },
+            xaxis: { categories: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'], axisBorder: { show: false }, axisTicks: { show: false }, labels: { style: { colors: isDark ? '#94a3b8' : '#64748b' } } },
+            yaxis: { labels: { style: { colors: isDark ? '#94a3b8' : '#64748b' } } },
+            grid: { borderColor: isDark ? '#334155' : '#f1f5f9', strokeDashArray: 4 },
+            theme: { mode: isDark ? 'dark' : 'light' }
+        };
+        const chart = new ApexCharts(document.querySelector("#salesChart"), options);
+        chart.render();
+
+        // Dark Mode Logic for Mock
+        const btn = document.getElementById('themeToggle');
+        btn.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+            const isNowDark = document.documentElement.classList.contains('dark');
+            chart.updateOptions({
+                theme: { mode: isNowDark ? 'dark' : 'light' },
+                grid: { borderColor: isNowDark ? '#334155' : '#f1f5f9' },
+                xaxis: { labels: { style: { colors: isNowDark ? '#94a3b8' : '#64748b' } } },
+                yaxis: { labels: { style: { colors: isNowDark ? '#94a3b8' : '#64748b' } } }
+            });
+        });
+    </script>
+</body>
+
+</html>

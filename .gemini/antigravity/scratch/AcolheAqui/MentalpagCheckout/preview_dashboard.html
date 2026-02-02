@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Preview - Mentalpag</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+    </style>
+</head>
+
+<body class="bg-slate-50 min-h-screen">
+
+    <!-- Mock Sidebar/Header Context -->
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar Mock -->
+        <div class="hidden md:flex md:flex-shrink-0">
+            <div class="flex flex-col w-64">
+                <div class="flex flex-col h-0 flex-1 border-r border-gray-200 bg-white">
+                    <div class="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
+                        <div class="flex items-center flex-shrink-0 px-4 mb-5">
+                            <span class="text-xl font-bold text-emerald-600">Mentalpag</span>
+                        </div>
+                        <nav class="mt-5 flex-1 px-2 bg-white space-y-1">
+                            <a href="#"
+                                class="bg-emerald-50 text-emerald-600 group flex items-center px-2 py-2 text-sm font-medium rounded-md border-l-4 border-emerald-500">
+                                <i data-lucide="layout-dashboard" class="mr-3 h-5 w-5"></i>
+                                Dashboard
+                            </a>
+                            <a href="#"
+                                class="text-gray-600 hover:bg-emerald-50 hover:text-emerald-900 group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+                                <i data-lucide="calendar" class="mr-3 h-5 w-5"></i>
+                                Minha Agenda
+                            </a>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex flex-col w-0 flex-1 overflow-hidden">
+            <main class="flex-1 relative overflow-y-auto focus:outline-none">
+                <div class="py-6">
+
+
+                    <!-- --- INICIO DO COMPONENTE DE CARDS (O que foi injetado) --- -->
+                    <div class="container mx-auto px-4 sm:px-6 md:px-8 mt-6">
+                        <div class="mb-4">
+                            <h2 class="text-xl font-bold text-slate-800 mb-4 flex items-center gap-2">
+                                <i data-lucide="calendar-check-2" class="w-6 h-6 text-emerald-600"></i>
+                                Últimos Agendamentos Recebidos
+                            </h2>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                                <!-- Card 1: Pago -->
+                                <div
+                                    class="bg-white p-4 rounded-xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow relative overflow-hidden group">
+                                    <div class="absolute top-0 left-0 w-1 h-full bg-emerald-500"></div>
+                                    <div class="flex justify-between items-start mb-2">
+                                        <span
+                                            class="text-[10px] font-bold px-2 py-0.5 rounded border uppercase bg-emerald-50 text-emerald-700 border-emerald-200">
+                                            Pago
+                                        </span>
+                                        <span class="text-xs text-slate-400 font-mono">09:00</span>
+                                    </div>
+                                    <h3 class="font-bold text-slate-800 truncate text-sm">Mariana Costa</h3>
+                                    <div class="flex items-center gap-2 mt-1 text-xs text-slate-500">
+                                        <i data-lucide="calendar" class="w-3 h-3"></i>
+                                        <span>15/01/2026</span>
+                                    </div>
+                                    <div class="mt-3 pt-2 border-t border-slate-50 flex gap-2 justify-end">
+                                        <button
+                                            class="p-1.5 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors"><i
+                                                data-lucide="message-circle" class="w-4 h-4"></i></button>
+                                    </div>
+                                </div>
+
+                                <!-- Card 2: Pendente -->
+                                <div
+                                    class="bg-white p-4 rounded-xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow relative overflow-hidden group">
+                                    <div class="absolute top-0 left-0 w-1 h-full bg-yellow-400"></div>
+                                    <div class="flex justify-between items-start mb-2">
+                                        <span
+                                            class="text-[10px] font-bold px-2 py-0.5 rounded border uppercase bg-yellow-50 text-yellow-700 border-yellow-200">
+                                            Pendente
+                                        </span>
+                                        <span class="text-xs text-slate-400 font-mono">14:30</span>
+                                    </div>
+                                    <h3 class="font-bold text-slate-800 truncate text-sm">João Silva</h3>
+                                    <div class="flex items-center gap-2 mt-1 text-xs text-slate-500">
+                                        <i data-lucide="calendar" class="w-3 h-3"></i>
+                                        <span>16/01/2026</span>
+                                    </div>
+                                    <div class="mt-3 pt-2 border-t border-slate-50 flex gap-2 justify-end">
+                                        <button
+                                            class="p-1.5 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors"><i
+                                                data-lucide="message-circle" class="w-4 h-4"></i></button>
+                                    </div>
+                                </div>
+
+                                <!-- Card 3: Confirmado -->
+                                <div
+                                    class="bg-white p-4 rounded-xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow relative overflow-hidden group">
+                                    <div class="absolute top-0 left-0 w-1 h-full bg-blue-500"></div>
+                                    <div class="flex justify-between items-start mb-2">
+                                        <span
+                                            class="text-[10px] font-bold px-2 py-0.5 rounded border uppercase bg-blue-50 text-blue-700 border-blue-200">
+                                            Confirmado
+                                        </span>
+                                        <span class="text-xs text-slate-400 font-mono">10:00</span>
+                                    </div>
+                                    <h3 class="font-bold text-slate-800 truncate text-sm">Fernanda Oliveira</h3>
+                                    <div class="flex items-center gap-2 mt-1 text-xs text-slate-500">
+                                        <i data-lucide="calendar" class="w-3 h-3"></i>
+                                        <span>18/01/2026</span>
+                                    </div>
+                                    <div class="mt-3 pt-2 border-t border-slate-50 flex gap-2 justify-end">
+                                        <button
+                                            class="p-1.5 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors"><i
+                                                data-lucide="message-circle" class="w-4 h-4"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- --- FIM DO COMPONENTE --- -->
+
+
+                    <!-- Mock do Dashboard Existente Embaixo -->
+                    <div class="container mx-auto px-4 sm:px-6 md:px-8">
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8 opacity-50 blur-[1px]">
+                            <div class="bg-white p-6 rounded-lg shadow">
+                                <h3 class="text-gray-500 text-sm font-medium">Vendas Totais</h3>
+                                <p class="text-2xl font-bold text-gray-900">R$ 12.450,00</p>
+                            </div>
+                            <div class="bg-white p-6 rounded-lg shadow">
+                                <h3 class="text-gray-500 text-sm font-medium">Quantidade Vendas</h3>
+                                <p class="text-2xl font-bold text-gray-900">142</p>
+                            </div>
+                            <div class="bg-white p-6 rounded-lg shadow">
+                                <h3 class="text-gray-500 text-sm font-medium">Ticket Médio</h3>
+                                <p class="text-2xl font-bold text-gray-900">R$ 87,60</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+
+</html>

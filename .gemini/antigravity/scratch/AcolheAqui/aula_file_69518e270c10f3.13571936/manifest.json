@@ -1,0 +1,23 @@
+{
+  "name": "Starfy",
+  "short_name": "Starfy",
+  "start_url": "/index.php",
+  "display": "standalone",
+  "background_color": "#fff7ed",
+  "theme_color": "#f97316",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://i.ibb.co/gbNBTgDD/1757909548831.jpg",
+      "type": "image/jpeg",
+      "sizes": "192x192",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://i.ibb.co/gbNBTgDD/1757909548831.jpg",
+      "type": "image/jpeg",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ]
+}

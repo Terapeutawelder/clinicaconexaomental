@@ -1,0 +1,116 @@
+/* Estilos para complementar o TailwindCSS e customizar o Payment Brick do Mercado Pago.
+*/
+body {
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Customização do botão principal do Mercado Pago */
+.mercadopago-button {
+    background-color: var(--accent-color, #00A3FF) !important; /* Usa a cor de destaque definida no PHP */
+    transition: filter 0.2s ease !important;
+    font-size: 1.125rem !important;
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+}
+
+.mercadopago-button:hover {
+    filter: brightness(1.1);
+}
+
+
+/* Novo Estilo para o Resumo Final */
+.checkout-summary-box {
+    background-color: #f9fafb; /* Cinza claro */
+    border: 1px solid #e5e7eb; /* Borda sutil */
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    padding: 1.5rem;
+}
+
+/* Estilo para a linha tracejada */
+.checkout-summary-box hr {
+    border-top-style: dashed;
+}
+
+/* Base para responsividade do menu lateral */
+/* Sidebar oculta por padrão em telas pequenas */
+#sidebar, #admin-sidebar {
+    position: fixed;
+    top: 80px; /* Altura do header fixo */
+    bottom: 0;
+    left: 0;
+    z-index: 40;
+    width: 100%;
+    max-width: 280px; /* Largura máxima para mobile */
+    background-color: white;
+    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+/* Sidebar visível quando a classe 'open' é aplicada */
+#sidebar.open, #admin-sidebar.open {
+    transform: translateX(0);
+}
+
+/* Overlay para fechar o menu ao clicar fora (mobile) */
+#sidebar-overlay, #admin-sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 30;
+    display: none; /* Oculto por padrão */
+    transition: opacity 0.3s ease-in-out;
+    opacity: 0;
+}
+
+/* Overlay visível quando a classe 'open' é aplicada */
+#sidebar-overlay.open, #admin-sidebar-overlay.open {
+    display: block;
+    opacity: 1;
+}
+
+/*
+   Ajuste do conteúdo principal
+   As regras de `margin-left`, `flex-grow`, `padding` e `overflow-y`
+   agora são controladas diretamente pelas classes do Tailwind CSS
+   aplicadas no HTML dos arquivos `index.php` e `admin.php`.
+   Remover regras genéricas aqui evita conflitos com o layout de `checkout.php`.
+*/
+/* main {
+    margin-left: 0;
+    flex-grow: 1;
+    overflow-y: auto;
+} */ /* REMOVIDO: Regras específicas para 'main' agora são definidas no HTML com Tailwind */
+
+/* Oculta o botão de toggle em telas maiores que md */
+#sidebar-toggle, #admin-sidebar-toggle {
+    display: flex; /* Visível por padrão em mobile */
+}
+
+/* Media query para telas maiores (desktop) */
+@media (min-width: 768px) { /* md breakpoint (768px) */
+    #sidebar, #admin-sidebar {
+        transform: translateX(0); /* Sempre visível em desktop */
+        width: 256px; /* md:w-64 */
+        box-shadow: none; /* Sem sombra no desktop */
+    }
+
+    #sidebar-toggle, #admin-sidebar-toggle {
+        display: none; /* Oculta em desktop */
+    }
+
+    /* main {
+        margin-left: 256px;
+    } */ /* REMOVIDO: A margem esquerda para o conteúdo principal agora é gerenciada pelo Tailwind no HTML (md:ml-64) */
+
+    #sidebar-overlay, #admin-sidebar-overlay {
+        display: none !important; /* Nunca visível em desktop */
+        opacity: 0 !important;
+    }
+}
