@@ -23,6 +23,8 @@ interface BookingCalendarProps {
   professionalName: string;
   professionalPhone?: string;
   availableHours: AvailableHour[];
+  requiredSessions?: number;
+  onComplete?: (selections: { date: string; time: string }[], clientData: { name: string; email: string; phone: string; notes: string }) => void;
 }
 
 interface TimeSlot {
@@ -30,9 +32,11 @@ interface TimeSlot {
   available: boolean;
 }
 
-const BookingCalendar = ({ professionalId, professionalName, professionalPhone, availableHours }: BookingCalendarProps) => {
+const BookingCalendar = ({ professionalId, professionalName, professionalPhone, availableHours, requiredSessions = 1, onComplete }: BookingCalendarProps) => {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
+  const [selections, setSelections] = useState<{ date: string; time: string }[]>([]);
+  
   const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([]);
   const [isLoadingSlots, setIsLoadingSlots] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -42,6 +46,9 @@ const BookingCalendar = ({ professionalId, professionalName, professionalPhone, 
   const [clientEmail, setClientEmail] = useState("");
   const [clientPhone, setClientPhone] = useState("");
   const [notes, setNotes] = useState("");
+
+  const isLastSession = selections.length === requiredSessions - 1;
+  const isSelectionComplete = selections.length === requiredSessions;
 
   // Get available days of week from professional's schedule
   const availableDaysOfWeek = [...new Set(
@@ -147,23 +154,39 @@ const BookingCalendar = ({ professionalId, professionalName, professionalPhone, 
         });
       };
 
-      const updatedSlots = slots.map(slot => ({
-        ...slot,
-        available: !bookedTimes.includes(slot.time) && !isSlotBusyOnGoogle(slot.time)
-      }));
+      const updatedSlots = slots.map(slot => {
+        const isSelectedInQueue = selections.some(s => s.date === dateStr && s.time === slot.time);
+        return {
+          ...slot,
+          available: !bookedTimes.includes(slot.time) && !isSlotBusyOnGoogle(slot.time) && !isSelectedInQueue
+        };
+      });
 
       setTimeSlots(updatedSlots);
       setIsLoadingSlots(false);
     };
 
     fetchAvailableSlots();
-  }, [selectedDate, professionalId, availableHours]);
+  }, [selectedDate, professionalId, availableHours, selections]);
+
+  const handleAddSession = () => {
+    if (!selectedDate || !selectedTime) return;
+    
+    const dateStr = format(selectedDate, "yyyy-MM-dd");
+    setSelections([...selections, { date: dateStr, time: selectedTime }]);
+    setSelectedDate(undefined);
+    setSelectedTime(null);
+  };
+
+  const handleRemoveSession = (index: number) => {
+    setSelections(selections.filter((_, i) => i !== index));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!selectedDate || !selectedTime) {
-      toast.error("Selecione uma data e horário");
+    if (!isSelectionComplete) {
+      toast.error(`Selecione todas as ${requiredSessions} sessões`);
       return;
     }
 
@@ -185,17 +208,28 @@ const BookingCalendar = ({ professionalId, professionalName, professionalPhone, 
       return;
     }
 
+    if (onComplete) {
+      onComplete(selections, {
+        name: clientName.trim(),
+        email: clientEmail.trim(),
+        phone: clientPhone.trim(),
+        notes: notes.trim()
+      });
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
-      const appointmentDate = format(selectedDate, "yyyy-MM-dd");
+      // Logic for single session direct booking (keeping compatibility)
+      const appointmentDate = selections[0].date;
+      const appointmentTime = selections[0].time;
       
-      // Use secure Edge Function instead of direct insert
       const { data, error } = await supabase.functions.invoke("create-appointment", {
         body: {
           professional_id: professionalId,
           appointment_date: appointmentDate,
-          appointment_time: selectedTime,
+          appointment_time: appointmentTime,
           client_name: clientName.trim(),
           client_email: clientEmail.trim(),
           client_phone: clientPhone.trim(),
@@ -207,46 +241,15 @@ const BookingCalendar = ({ professionalId, professionalName, professionalPhone, 
       if (error) throw error;
 
       if (data?.error) {
-        // Handle specific error codes
-        if (data.code === "RATE_LIMIT_EXCEEDED") {
-          toast.error("Muitas tentativas. Aguarde alguns minutos.");
-        } else if (data.code === "SLOT_UNAVAILABLE") {
-          toast.error("Este horário já foi reservado. Escolha outro.");
-          // Refresh available slots
-          setSelectedTime(null);
-        } else if (data.code === "VALIDATION_ERROR") {
-          toast.error(data.details?.[0] || "Dados inválidos");
-        } else {
-          toast.error(data.error);
-        }
+        toast.error(data.error);
         return;
       }
-
-      // Send notifications via edge function (fire and forget)
-      supabase.functions.invoke("send-appointment-notification", {
-        body: {
-          clientName: clientName.trim(),
-          clientEmail: clientEmail.trim(),
-          clientPhone: clientPhone.trim(),
-          professionalName,
-          professionalPhone,
-          appointmentDate,
-          appointmentTime: selectedTime,
-          notes: notes.trim() || null,
-        },
-      }).then((result) => {
-        if (result.error) {
-          console.error("Error sending notifications:", result.error);
-        } else {
-          console.log("Notifications sent:", result.data);
-        }
-      });
 
       setBookingSuccess(true);
       toast.success("Agendamento realizado com sucesso!");
     } catch (error) {
       console.error("Error creating appointment:", error);
-      toast.error("Erro ao realizar agendamento. Tente novamente.");
+      toast.error("Erro ao realizar agendamento.");
     } finally {
       setIsSubmitting(false);
     }
@@ -256,6 +259,7 @@ const BookingCalendar = ({ professionalId, professionalName, professionalPhone, 
     setBookingSuccess(false);
     setSelectedDate(undefined);
     setSelectedTime(null);
+    setSelections([]);
     setClientName("");
     setClientEmail("");
     setClientPhone("");
@@ -286,71 +290,127 @@ const BookingCalendar = ({ professionalId, professionalName, professionalPhone, 
 
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-border p-6">
-      <h2 className="text-xl font-bold text-foreground mb-6 flex items-center gap-2">
-        <CalendarIcon className="h-5 w-5 text-primary" />
-        Agendar Sessão
+      <h2 className="text-xl font-bold text-foreground mb-6 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <CalendarIcon className="h-5 w-5 text-primary" />
+          {requiredSessions > 1 ? `Agendar Pacote (${requiredSessions} sessões)` : "Agendar Sessão"}
+        </div>
+        {requiredSessions > 1 && (
+          <div className="text-xs font-semibold px-2 py-1 bg-primary/10 text-primary rounded-full">
+            {selections.length} de {requiredSessions} selecionadas
+          </div>
+        )}
       </h2>
 
-      <div className="space-y-6">
-        {/* Calendar */}
-        <div>
-          <Label className="text-sm font-medium mb-2 block">Escolha uma data</Label>
-          <div className="flex justify-center">
-            <Calendar
-              mode="single"
-              selected={selectedDate}
-              onSelect={setSelectedDate}
-              disabled={isDateDisabled}
-              locale={ptBR}
-              fromDate={new Date()}
-              toDate={addDays(new Date(), 60)}
-              className={cn("rounded-md border pointer-events-auto")}
-            />
+      {/* Selected Slots Summary */}
+      {selections.length > 0 && (
+        <div className="mb-6 space-y-2">
+          <Label className="text-xs font-semibold text-primary uppercase tracking-wider">Sessões Selecionadas</Label>
+          <div className="grid grid-cols-1 gap-2">
+            {selections.map((sel, idx) => (
+              <div key={idx} className="flex items-center justify-between p-3 bg-primary/5 rounded-lg border border-primary/10">
+                <div className="flex items-center gap-3">
+                  <div className="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-[10px] font-bold">
+                    {idx + 1}
+                  </div>
+                  <span className="text-sm font-medium text-foreground">
+                    {format(new Date(sel.date + 'T12:00:00'), "dd/MM/yyyy")} às {sel.time}
+                  </span>
+                </div>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="h-8 w-8 p-0 text-muted-foreground hover:text-destructive"
+                  onClick={() => handleRemoveSession(idx)}
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+            ))}
           </div>
         </div>
+      )}
 
-        {/* Time Slots */}
-        {selectedDate && (
-          <div>
-            <Label className="text-sm font-medium mb-2 block flex items-center gap-2">
-              <Clock className="h-4 w-4" />
-              Horários disponíveis para {format(selectedDate, "dd/MM")}
-            </Label>
-            
-            {isLoadingSlots ? (
-              <div className="flex items-center justify-center py-8">
-                <Loader2 className="h-6 w-6 animate-spin text-primary" />
+      <div className="space-y-6">
+        {/* Calendar Selection Flow */}
+        {!isSelectionComplete && (
+          <div className="animate-in fade-in slide-in-from-top-2 duration-300">
+            <div className="bg-muted/30 rounded-xl p-4 border border-border/50">
+              <Label className="text-sm font-semibold mb-3 block">
+                {requiredSessions > 1 
+                  ? `Selecione a ${selections.length + 1}ª sessão` 
+                  : "Selecione a data e horário"}
+              </Label>
+              
+              <div className="flex flex-col items-center">
+                <Calendar
+                  mode="single"
+                  selected={selectedDate}
+                  onSelect={setSelectedDate}
+                  disabled={isDateDisabled}
+                  locale={ptBR}
+                  fromDate={new Date()}
+                  toDate={addDays(new Date(), 60)}
+                  className={cn("rounded-md border bg-background")}
+                />
               </div>
-            ) : timeSlots.length > 0 ? (
-              <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
-                {timeSlots.map((slot) => (
-                  <Button
-                    key={slot.time}
-                    variant={selectedTime === slot.time ? "default" : "outline"}
-                    size="sm"
-                    disabled={!slot.available}
-                    onClick={() => setSelectedTime(slot.time)}
-                    className={cn(
-                      "text-sm",
-                      !slot.available && "opacity-50 line-through"
-                    )}
-                  >
-                    {slot.time}
-                  </Button>
-                ))}
-              </div>
-            ) : (
-              <p className="text-muted-foreground text-sm text-center py-4">
-                Nenhum horário disponível nesta data.
-              </p>
-            )}
+
+              {selectedDate && (
+                <div className="mt-4 space-y-3 animate-in fade-in duration-300">
+                  <Label className="text-xs font-medium text-muted-foreground flex items-center gap-2">
+                    <Clock className="h-3 w-3" />
+                    Horários para {format(selectedDate, "dd/MM")}
+                  </Label>
+                  
+                  {isLoadingSlots ? (
+                    <div className="flex items-center justify-center py-4">
+                      <Loader2 className="h-5 w-5 animate-spin text-primary" />
+                    </div>
+                  ) : timeSlots.length > 0 ? (
+                    <div className="grid grid-cols-4 gap-2">
+                      {timeSlots.map((slot) => (
+                        <Button
+                          key={slot.time}
+                          variant={selectedTime === slot.time ? "default" : "outline"}
+                          size="sm"
+                          disabled={!slot.available}
+                          onClick={() => setSelectedTime(slot.time)}
+                          className={cn(
+                            "text-xs px-1",
+                            !slot.available && "opacity-30"
+                          )}
+                        >
+                          {slot.time}
+                        </Button>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-xs text-muted-foreground text-center py-2">Sem horários</p>
+                  )}
+
+                  {selectedTime && (
+                    <Button 
+                      onClick={handleAddSession} 
+                      className="w-full mt-2 bg-primary group"
+                    >
+                      {requiredSessions > 1 ? `Confirmar ${selections.length + 1}ª Sessão` : "Confirmar Horário"}
+                      <ChevronRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                    </Button>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
         )}
 
-        {/* Client Form */}
-        {selectedTime && (
-          <form onSubmit={handleSubmit} className="space-y-4 pt-4 border-t border-border">
-            <h3 className="font-medium text-foreground">Seus dados</h3>
+        {/* Client Form - Only shows when all sessions are selected */}
+        {isSelectionComplete && (
+          <form onSubmit={handleSubmit} className="space-y-4 pt-4 border-t border-border animate-in zoom-in-95 duration-300">
+            <h3 className="font-bold text-lg text-primary flex items-center gap-2">
+              <CheckCircle className="h-5 w-5" />
+              Finalizar Agendamento
+            </h3>
+            <p className="text-sm text-muted-foreground">Preencha seus dados para prosseguir para o pagamento.</p>
             
             <div className="space-y-3">
               <div>
@@ -415,22 +475,22 @@ const BookingCalendar = ({ professionalId, professionalName, professionalPhone, 
               </div>
             </div>
 
-            <Button type="submit" className="w-full" disabled={isSubmitting}>
+            <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-white font-bold h-12" disabled={isSubmitting}>
               {isSubmitting ? (
                 <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Agendando...
+                  <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                  Processando...
                 </>
               ) : (
                 <>
-                  <CheckCircle className="mr-2 h-4 w-4" />
-                  Confirmar Agendamento
+                  <CreditCard className="mr-2 h-5 w-5" />
+                  Ir para Pagamento
                 </>
               )}
             </Button>
 
             <p className="text-xs text-muted-foreground text-center">
-              Sessão de 50 minutos • {format(selectedDate, "dd 'de' MMMM", { locale: ptBR })} às {selectedTime}
+              Você está agendando {requiredSessions} sessão(ões) de 50 minutos.
             </p>
           </form>
         )}

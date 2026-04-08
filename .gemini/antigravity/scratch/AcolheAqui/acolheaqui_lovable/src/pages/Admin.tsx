@@ -9,9 +9,7 @@ import { Loader2 } from "lucide-react";
 const AdminOverview = lazy(() => import("@/components/admin/AdminOverview"));
 const AdminWhitelabels = lazy(() => import("@/components/admin/AdminWhitelabels"));
 const AdminProfessionals = lazy(() => import("@/components/admin/AdminProfessionals"));
-const AdminSubscriptions = lazy(() => import("@/components/admin/AdminSubscriptions"));
-const AdminPlans = lazy(() => import("@/components/admin/AdminPlans"));
-const AdminCoupons = lazy(() => import("@/components/admin/AdminCoupons"));
+const AdminServices = lazy(() => import("@/components/admin/AdminServices"));
 const AdminPayments = lazy(() => import("@/components/admin/AdminPayments"));
 const AdminSettings = lazy(() => import("@/components/admin/AdminSettings"));
 const AdminIntegrations = lazy(() => import("@/components/admin/AdminIntegrations"));
@@ -87,12 +85,8 @@ const Admin = () => {
         return <AdminWhitelabels />;
       case "professionals":
         return <AdminProfessionals />;
-      case "subscriptions":
-        return <AdminSubscriptions />;
-      case "plans":
-        return <AdminPlans userRole={userRole} />;
-      case "coupons":
-        return <AdminCoupons userRole={userRole} />;
+      case "services":
+        return <AdminServices />;
       case "payments":
         return <AdminPayments />;
       case "settings":

@@ -48,9 +48,7 @@ const menuItems: MenuItem[] = [
   { id: "overview", label: "Visão Geral", icon: LayoutDashboard },
   { id: "whitelabels", label: "Whitelabels", icon: Building2 },
   { id: "professionals", label: "Profissionais", icon: Users },
-  { id: "subscriptions", label: "Assinaturas", icon: CreditCard },
-  { id: "plans", label: "Planos", icon: Package },
-  { id: "coupons", label: "Cupons", icon: Tag },
+  { id: "services", label: "Serviços", icon: Package },
   { 
     id: "payments-menu", 
     label: "Pagamentos", 

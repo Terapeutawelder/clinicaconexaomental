@@ -122,6 +122,10 @@ const defaultConfig: CheckoutConfig = {
 const Checkout = () => {
   const { serviceId } = useParams();
   const [searchParams] = useSearchParams();
+  const [selectedServiceId, setSelectedServiceId] = useState<string | null>(serviceId || null);
+  const appointmentId = searchParams.get("appointment_id");
+  const [availableServices, setAvailableServices] = useState<Service[]>([]);
+  
   const [service, setService] = useState<Service | null>(null);
   const [professionalId, setProfessionalId] = useState<string | null>(null);
   const [gatewayConfig, setGatewayConfig] = useState<{ accessToken: string; gateway: string } | null>(null);
@@ -136,6 +140,7 @@ const Checkout = () => {
   const [pixApproved, setPixApproved] = useState(false);
   const [copied, setCopied] = useState(false);
   const [virtualRoomLink, setVirtualRoomLink] = useState<string | null>(null);
+  const [selectedSlots, setSelectedSlots] = useState<{ date: string, time: string }[]>([]);
   const isPreview = searchParams.get("preview") === "true";
   
   // Professional profile state
@@ -155,16 +160,51 @@ const Checkout = () => {
   }, [searchParams]);
 
   useEffect(() => {
-    if (serviceId) {
-      fetchService();
+    if (selectedServiceId && service?.id !== selectedServiceId) {
+      fetchService(selectedServiceId);
+    } else if (!selectedServiceId && appointmentId && availableServices.length === 0) {
+      fetchAppointmentServices();
     }
-  }, [serviceId]);
+
+    // Process additional query params from GlobalServicesSection flow
+    const slotsParam = searchParams.get("slots");
+    if (slotsParam && selectedSlots.length === 0) {
+      try {
+        const parsed = JSON.parse(decodeURIComponent(slotsParam));
+        setSelectedSlots(parsed);
+      } catch (e) {
+        console.error("Error parsing slots:", e);
+      }
+    }
+
+    const clientParam = searchParams.get("client");
+    if (clientParam && !formData.name) {
+      try {
+        const client = JSON.parse(decodeURIComponent(clientParam));
+        setFormData(prev => ({
+          ...prev,
+          name: client.name || prev.name,
+          email: client.email || prev.email,
+          phone: client.phone || prev.phone
+        }));
+      } catch (e) {
+        console.error("Error parsing client:", e);
+      }
+    }
+
+    const profId = searchParams.get("professionalId");
+    if (profId && !professionalId) {
+      setProfessionalId(profId);
+      fetchGatewayConfig(profId);
+      fetchProfile(profId);
+    }
+  }, [selectedServiceId, appointmentId, service?.id, searchParams, formData.name, professionalId]);
 
   // Timer with localStorage persistence
   useEffect(() => {
     if (!config.timer.enabled) return;
     
-    const storageKey = `checkoutTimer_${serviceId || 'default'}`;
+    const storageKey = `checkoutTimer_${selectedServiceId || 'default'}`;
     const storedEndTime = localStorage.getItem(storageKey);
     
     let endTime: number;
@@ -192,33 +232,92 @@ const Checkout = () => {
     const interval = setInterval(updateTimer, 1000);
     
     return () => clearInterval(interval);
-  }, [config.timer.enabled, config.timer.minutes, serviceId]);
+  }, [config.timer.enabled, config.timer.minutes, selectedServiceId]);
 
-  const fetchService = async () => {
+  const fetchAppointmentServices = async () => {
+    setIsLoading(true);
     try {
-      // Use public_services view for secure public access (excludes sensitive internal fields)
+      // 1. Fetch appointment
+      const { data: appt, error: apptError } = await supabase
+        .from('appointments')
+        .select('professional_id, client_name, client_email, client_phone')
+        .eq('id', appointmentId)
+        .maybeSingle();
+        
+      if (apptError) throw apptError;
+      
+      if (appt?.professional_id) {
+        setProfessionalId(appt.professional_id);
+        
+        // Auto-fill form data
+        setFormData(prev => ({
+          ...prev,
+          name: appt.client_name || prev.name,
+          email: appt.client_email || prev.email,
+          phone: appt.client_phone || prev.phone
+        }));
+        
+        await fetchGatewayConfig(appt.professional_id);
+        await fetchProfile(appt.professional_id);
+        
+        // Fetch services (both specific to professional and global services)
+        const { data: services, error: svcError } = await supabase
+          .from('public_services')
+          .select('*')
+          .or(`professional_id.eq.${appt.professional_id},professional_id.is.null`)
+          .eq('is_active', true);
+          
+        if (svcError) throw svcError;
+        
+        if (services && services.length > 0) {
+          setAvailableServices(services);
+          // Auto-select if only 1 service exists
+          if (services.length === 1) {
+            setSelectedServiceId(services[0].id);
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching appointment info:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const fetchService = async (id: string) => {
+    setIsLoading(true);
+    try {
       const { data, error } = await supabase
         .from("public_services")
         .select("*")
-        .eq("id", serviceId)
+        .eq("id", id)
         .maybeSingle();
 
       if (error) throw error;
       setService(data);
       
-      if (data?.professional_id) {
-        setProfessionalId(data.professional_id);
-        // Fetch payment gateway config
-        await fetchGatewayConfig(data.professional_id);
-        // Fetch professional profile
-        await fetchProfile(data.professional_id);
+      if (!professionalId) {
+        if (data?.professional_id) {
+          setProfessionalId(data.professional_id);
+          await fetchGatewayConfig(data.professional_id);
+          await fetchProfile(data.professional_id);
+        } else {
+          // Global Service - Use clinic gateway
+          await fetchGatewayConfig("clinic");
+          // Use professional information from query param if available for profile display
+          const profId = searchParams.get("professionalId");
+          if (profId) {
+            await fetchProfile(profId);
+            setProfessionalId(profId);
+          }
+        }
       }
       
       if (!searchParams.get("config") && data?.checkout_config) {
         setConfig(prev => ({ ...prev, ...data.checkout_config as Partial<CheckoutConfig> }));
       }
     } catch (error) {
-      console.error("Error fetching service:", error);
+      console.error("Error fetching service: ", error);
     } finally {
       setIsLoading(false);
     }
@@ -255,14 +354,19 @@ const Checkout = () => {
   };
 
 
-  const fetchGatewayConfig = async (profId: string) => {
+  const fetchGatewayConfig = async (profId: string | null) => {
     try {
-      const { data, error } = await supabase
-        .from("payment_gateways")
-        .select("*")
-        .eq("professional_id", profId)
-        .eq("is_active", true)
-        .maybeSingle();
+      let query = supabase.from("payment_gateways").select("*").eq("is_active", true);
+      
+      if (profId === "clinic" || !profId) {
+        // Fetch clinic/admin gateway (can be filtered by professional_id IS NULL or specific admin role)
+        // For now, looking for gateway where professional_id is null or belongs to an admin
+        query = query.is("professional_id", null);
+      } else {
+        query = query.eq("professional_id", profId);
+      }
+
+      const { data, error } = await query.maybeSingle();
 
       if (error) throw error;
 
@@ -356,6 +460,61 @@ const Checkout = () => {
       .replace(/(\d{2})(\d)/, '($1) $2')
       .replace(/(\d{5})(\d)/, '$1-$2')
       .replace(/(-\d{4})\d+?$/, '$1');
+  };
+
+  const createFinalAppointments = async (transactionId: string) => {
+    if (!professionalId || !service) {
+      console.error("Missing professionalId or service for appointment creation");
+      return;
+    }
+
+    try {
+      const roomCode = Math.random().toString(36).substring(2, 10).toUpperCase();
+      const roomLink = getVirtualRoomUrl(roomCode);
+      setVirtualRoomLink(roomLink);
+
+      // If we have specific slots selected (Packages info)
+      if (selectedSlots.length > 0) {
+        console.log("Creating multiple appointments for slots:", selectedSlots);
+        // Create multiple appointments
+        const appointments = selectedSlots.map(slot => ({
+          professional_id: professionalId,
+          appointment_date: slot.date,
+          appointment_time: slot.time,
+          client_name: formData.name,
+          client_email: formData.email,
+          client_phone: formData.phone || null,
+          status: 'confirmed',
+          payment_status: 'approved',
+          session_type: 'session',
+          duration_minutes: service.duration_minutes || 50,
+          virtual_room_code: roomCode,
+          virtual_room_link: roomLink,
+          amount_cents: 0 
+        }));
+
+        const { error: insertError } = await (supabase.from("appointments") as any).insert(appointments);
+        if (insertError) throw insertError;
+      } else {
+        // Legacy flow or Single session from booking calendar
+        const { error: updateError } = await (supabase.from("appointments") as any)
+          .update({ 
+            virtual_room_code: roomCode, 
+            virtual_room_link: roomLink,
+            payment_status: 'approved',
+            status: 'confirmed'
+          })
+          .eq("professional_id", professionalId)
+          .eq("payment_status", "pending")
+          .order("created_at", { ascending: false })
+          .limit(1);
+        
+        if (updateError) throw updateError;
+      }
+    } catch (error) {
+      console.error("Error creating final appointments:", error);
+      toast.error("Erro ao registrar agendamentos. Entre em contato com o suporte.");
+    }
   };
 
   const validateForm = useCallback(() => {
@@ -485,6 +644,8 @@ const Checkout = () => {
             .from("transactions")
             .update({ payment_status: 'approved' })
             .eq("id", transaction.id);
+          
+          await createFinalAppointments(transaction.id);
           setPixApproved(true);
           toast.success("Pagamento aprovado!");
         }, 8000);
@@ -523,19 +684,9 @@ const Checkout = () => {
               .from("transactions")
               .update({ payment_status: 'approved' })
               .eq("id", transactionId);
+            
+            await createFinalAppointments(transactionId);
             setPixApproved(true);
-            // Generate virtual room link and save to appointment
-            const roomCode = Math.random().toString(36).substring(2, 10).toUpperCase();
-            const roomLink = getVirtualRoomUrl(roomCode);
-            setVirtualRoomLink(roomLink);
-            // Update any pending appointment with this room info
-            await supabase
-              .from("appointments")
-              .update({ virtual_room_code: roomCode, virtual_room_link: roomLink })
-              .eq("professional_id", professionalId)
-              .eq("payment_status", "pending")
-              .order("created_at", { ascending: false })
-              .limit(1);
             toast.success("Pagamento aprovado!");
             return;
           }
@@ -548,18 +699,8 @@ const Checkout = () => {
             .single();
 
           if (data?.payment_status === 'approved' || data?.payment_status === 'paid') {
+            await createFinalAppointments(transactionId);
             setPixApproved(true);
-            const roomCode = Math.random().toString(36).substring(2, 10).toUpperCase();
-            const roomLink = getVirtualRoomUrl(roomCode);
-            setVirtualRoomLink(roomLink);
-            // Update appointment with room info
-            await supabase
-              .from("appointments")
-              .update({ virtual_room_code: roomCode, virtual_room_link: roomLink })
-              .eq("professional_id", professionalId)
-              .eq("payment_status", "pending")
-              .order("created_at", { ascending: false })
-              .limit(1);
             toast.success("Pagamento aprovado!");
             return;
           }
@@ -626,6 +767,9 @@ const Checkout = () => {
         .update({ payment_status: 'approved' })
         .eq("id", transaction.id);
       
+      await createFinalAppointments(transaction.id);
+      setPixApproved(true);
+      setShowPixModal(true); // Show success message
       toast.success("Pagamento aprovado!");
     } catch (error) {
       console.error("Card payment error:", error);
@@ -637,15 +781,45 @@ const Checkout = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: config.backgroundColor }}>
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: config.backgroundColor || '#f3f4f6' }}>
         <Loader2 className="w-8 h-8 animate-spin text-gray-600" />
+      </div>
+    );
+  }
+
+  if (!service && availableServices.length > 0) {
+    return (
+      <div className="min-h-screen flex items-center justify-center p-4 bg-gray-50">
+        <div className="bg-white rounded-xl shadow-lg p-6 sm:p-8 max-w-lg w-full">
+          <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">Escolha o serviço</h2>
+          <p className="text-center text-gray-600 mb-6">Qual tipo de atendimento você agendou?</p>
+          <div className="space-y-4">
+            {availableServices.map(svc => (
+              <div 
+                key={svc.id} 
+                className="border-2 border-gray-100 p-5 rounded-xl cursor-pointer hover:border-[#5521ea] hover:shadow-md transition-all group"
+                onClick={() => setSelectedServiceId(svc.id)}
+              >
+                <div className="flex justify-between items-center">
+                  <div>
+                    <h3 className="font-bold text-lg text-gray-800 group-hover:text-[#5521ea] transition-colors">{svc.name}</h3>
+                    {svc.duration_minutes && <p className="text-sm text-gray-500 mt-1 flex items-center gap-1"><Clock className="w-3 h-3"/> {svc.duration_minutes} minutos</p>}
+                  </div>
+                  <div className="text-xl font-bold" style={{ color: config.accentColor || '#5521ea' }}>
+                    {formatPrice(svc.price_cents)}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     );
   }
 
   if (!service) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: config.backgroundColor }}>
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: config.backgroundColor || '#f3f4f6' }}>
         <p className="text-gray-500">Serviço não encontrado</p>
       </div>
     );
@@ -837,6 +1011,21 @@ const Checkout = () => {
                     <span className="truncate pr-2">{productName}</span>
                     <span className="font-medium">{formatPrice(service.price_cents)}</span>
                   </div>
+
+                  {selectedSlots.length > 0 && (
+                    <div className="mt-3 pt-3 border-t border-gray-100">
+                      <p className="text-[10px] uppercase font-bold text-gray-400 mb-2">Horários Selecionados</p>
+                      <div className="space-y-1.5 max-h-[120px] overflow-y-auto pr-1">
+                        {selectedSlots.map((slot, idx) => (
+                          <div key={idx} className="flex justify-between items-center bg-gray-50 p-1.5 rounded text-[11px]">
+                            <span className="font-medium">Sessão {idx + 1}</span>
+                            <span>{new Date(slot.date + 'T12:00:00').toLocaleDateString('pt-BR')} {slot.time}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
                   <hr className="border-gray-100" />
                   <div className="flex justify-between font-bold text-gray-800">
                     <span>Total</span>
