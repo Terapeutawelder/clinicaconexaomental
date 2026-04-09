@@ -21,7 +21,8 @@ import {
 import { toast } from "sonner";
 import { formatProfessionalName } from "@/lib/formatProfessionalName";
 import { createAppointmentICS } from "@/lib/generateICS";
-import confetti from "canvas-confetti";
+import * as confettiModule from "canvas-confetti";
+const confetti = (confettiModule as any).default || confettiModule;
 
 interface AppointmentConfirmationModalProps {
   open: boolean;

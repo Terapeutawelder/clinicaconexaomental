@@ -1,0 +1,46 @@
+﻿
+> conexao-mental@0.0.0 build
+> vite build
+
+[36mvite v5.4.19 [32mbuilding for production...[36m[39m
+transforming...
+node.exe : Browserslist: browsers data (caniuse-lite) is 10 months old. Please run:
+No C:\Program Files\nodejs\npm.ps1:29 caractere:3
++   & $NODE_EXE $NPM_CLI_JS $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Browserslist: b...ld. Please run::String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[33m[vite:css] @import must precede all other statements (besides @charset or empty @layer)
+3  |  @tailwind utilities;
+4  |  
+5  |  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
+   |  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+6  |  
+7  |  @layer base {[39m
+[32mÔ£ô[39m 2157 modules transformed.
+[31mx[39m Build failed in 13.56s
+[31merror during build:
+[31m[vite]: Rollup failed to resolve import "canvas-confetti" from "C:/Users/Welder de Aquino/.gemini/antigravity/scra
+tch/AcolheAqui/acolheaqui_lovable/src/components/checkout/AppointmentConfirmationModal.tsx".
+This is most likely unintended because it can break your application at runtime.
+If you do want to externalize this module explicitly add it to
+`build.rollupOptions.external`[31m
+    at viteWarn (file:///C:/Users/Welder%20de%20Aquino/.gemini/antigravity/scratch/AcolheAqui/node_modules/vite/dist/no
+de/chunks/dep-C6uTJdX2.js:65839:17)
+    at onwarn (file:///C:/Users/Welder%20de%20Aquino/.gemini/antigravity/scratch/AcolheAqui/node_modules/@vitejs/plugin
+-react-swc/index.js:90:7)
+    at onRollupWarning (file:///C:/Users/Welder%20de%20Aquino/.gemini/antigravity/scratch/AcolheAqui/node_modules/vite/
+dist/node/chunks/dep-C6uTJdX2.js:65869:5)
+    at onwarn (file:///C:/Users/Welder%20de%20Aquino/.gemini/antigravity/scratch/AcolheAqui/node_modules/vite/dist/node
+/chunks/dep-C6uTJdX2.js:65534:7)
+    at file:///C:/Users/Welder%20de%20Aquino/.gemini/antigravity/scratch/AcolheAqui/node_modules/rollup/dist/es/shared/
+node-entry.js:19393:13
+    at Object.logger [as onLog] (file:///C:/Users/Welder%20de%20Aquino/.gemini/antigravity/scratch/AcolheAqui/node_modu
+les/rollup/dist/es/shared/node-entry.js:21119:9)
+    at ModuleLoader.handleInvalidResolvedId (file:///C:/Users/Welder%20de%20Aquino/.gemini/antigravity/scratch/AcolheAq
+ui/node_modules/rollup/dist/es/shared/node-entry.js:20008:26)
+    at file:///C:/Users/Welder%20de%20Aquino/.gemini/antigravity/scratch/AcolheAqui/node_modules/rollup/dist/es/shared/
+node-entry.js:19966:26[39m

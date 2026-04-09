@@ -55,6 +55,7 @@ import DynamicBannerTemplate from "./DynamicBannerTemplate";
 interface CheckoutEditorPageProps {
   profileId: string;
   serviceId: string;
+  isGlobalService?: boolean;
   onBack: () => void;
 }
 
@@ -376,7 +377,7 @@ const BannerUploadSection = ({
   );
 };
 
-const CheckoutEditorPage = ({ profileId, serviceId, onBack }: CheckoutEditorPageProps) => {
+const CheckoutEditorPage = ({ profileId, serviceId, isGlobalService, onBack }: CheckoutEditorPageProps) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [service, setService] = useState<Service | null>(null);
@@ -479,44 +480,46 @@ const CheckoutEditorPage = ({ profileId, serviceId, onBack }: CheckoutEditorPage
 
 
       // Fetch professional profile with user_slug and avatar
-      const { data: profileData } = await supabase
-        .from("profiles")
-        .select("full_name, user_slug, avatar_url")
-        .eq("id", profileId)
-        .single();
+      if (!isGlobalService && profileId) {
+        const { data: profileData } = await supabase
+          .from("profiles")
+          .select("full_name, user_slug, avatar_url")
+          .eq("id", profileId)
+          .single();
 
-      if (profileData) {
-        const fullName = profileData.full_name || "";
-        setProfessionalName(fullName);
-        setProfessionalAvatar(profileData.avatar_url);
-        
-        // Use saved user_slug from profile, or from checkout config, or generate from name
-        const existingSlug = profileData.user_slug || "";
-        setSavedSlug(existingSlug);
-        
-        const checkoutConfig = serviceData.checkout_config as Partial<CheckoutConfig> | null;
-        
-        // Priority: 1) checkout config userSlug, 2) saved profile slug, 3) generate from name
-        let slugToUse = "";
-        if (checkoutConfig?.userSlug && checkoutConfig.userSlug.trim() !== "") {
-          slugToUse = checkoutConfig.userSlug;
-        } else if (existingSlug && existingSlug.trim() !== "") {
-          slugToUse = existingSlug;
-        } else if (fullName && fullName.trim() !== "") {
-          slugToUse = generateUserSlug(fullName.trim().split(/\s+/)[0] || "");
-        }
-        
-        setConfig(prev => ({
-          ...prev,
-          ...checkoutConfig,
-          userSlug: slugToUse
-        }));
-        
-        // Check availability for generated slugs
-        if (slugToUse && slugToUse !== existingSlug) {
-          checkSlugAvailability(slugToUse);
-        } else if (slugToUse) {
-          setSlugStatus('available');
+        if (profileData) {
+          const fullName = profileData.full_name || "";
+          setProfessionalName(fullName);
+          setProfessionalAvatar(profileData.avatar_url);
+          
+          // Use saved user_slug from profile, or from checkout config, or generate from name
+          const existingSlug = profileData.user_slug || "";
+          setSavedSlug(existingSlug);
+          
+          const checkoutConfig = serviceData.checkout_config as Partial<CheckoutConfig> | null;
+          
+          // Priority: 1) checkout config userSlug, 2) saved profile slug, 3) generate from name
+          let slugToUse = "";
+          if (checkoutConfig?.userSlug && checkoutConfig.userSlug.trim() !== "") {
+            slugToUse = checkoutConfig.userSlug;
+          } else if (existingSlug && existingSlug.trim() !== "") {
+            slugToUse = existingSlug;
+          } else if (fullName && fullName.trim() !== "") {
+            slugToUse = generateUserSlug(fullName.trim().split(/\s+/)[0] || "");
+          }
+          
+          setConfig(prev => ({
+            ...prev,
+            ...checkoutConfig,
+            userSlug: slugToUse
+          }));
+          
+          // Check availability for generated slugs
+          if (slugToUse && slugToUse !== existingSlug) {
+            checkSlugAvailability(slugToUse);
+          } else if (slugToUse) {
+            setSlugStatus('available');
+          }
         }
       }
     } catch (error) {
@@ -582,7 +585,7 @@ const CheckoutEditorPage = ({ profileId, serviceId, onBack }: CheckoutEditorPage
 
 
       // If using subpath, also save the slug to the profile
-      if (config.domainType === 'subpath' && config.userSlug && config.userSlug !== savedSlug) {
+      if (!isGlobalService && config.domainType === 'subpath' && config.userSlug && config.userSlug !== savedSlug) {
         const { error: profileError } = await supabase
           .from("profiles")
           .update({ user_slug: config.userSlug })
@@ -738,7 +741,7 @@ const CheckoutEditorPage = ({ profileId, serviceId, onBack }: CheckoutEditorPage
               </div>
 
               {/* Subpath Configuration */}
-              {config.domainType === 'subpath' && (
+              {!isGlobalService && config.domainType === 'subpath' && (
                 <div className={`border rounded-lg p-4 space-y-3 ${
                   slugStatus === 'taken' 
                     ? 'bg-red-50 border-red-200' 
@@ -746,7 +749,7 @@ const CheckoutEditorPage = ({ profileId, serviceId, onBack }: CheckoutEditorPage
                 }`}>
                   <Label className="text-gray-700 text-sm font-semibold">Seu Identificador</Label>
                   <div className="flex items-center gap-2">
-                    <span className="text-sm text-gray-600 whitespace-nowrap">acolheaqui.com.br/</span>
+                    <span className="text-sm text-gray-600 whitespace-nowrap">conexaomental.com.br/</span>
                     <div className="flex-1 relative">
                       <Input
                         value={config.userSlug}

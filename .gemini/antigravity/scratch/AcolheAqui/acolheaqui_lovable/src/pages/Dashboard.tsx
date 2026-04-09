@@ -23,7 +23,6 @@ const WhatsAppConnections = lazy(() => import("@/components/dashboard/whatsapp/W
 const WhatsAppDispatches = lazy(() => import("@/components/dashboard/whatsapp/WhatsAppDispatches").then(m => ({ default: m.WhatsAppDispatches })));
 const WhatsAppLists = lazy(() => import("@/components/dashboard/whatsapp/WhatsAppLists").then(m => ({ default: m.WhatsAppLists })));
 const WhatsAppSettings = lazy(() => import("@/components/dashboard/whatsapp/WhatsAppSettings").then(m => ({ default: m.WhatsAppSettings })));
-const CheckoutConfigPage = lazy(() => import("@/components/dashboard/CheckoutConfigPage"));
 const SettingsPage = lazy(() => import("@/components/dashboard/SettingsPage"));
 const SalesHistoryPage = lazy(() => import("@/components/dashboard/SalesHistoryPage"));
 const SalesReportsPage = lazy(() => import("@/components/dashboard/SalesReportsPage"));
@@ -136,8 +135,6 @@ const Dashboard = () => {
           return <SalesReportsPage profileId={profileId} />;
         case "finances":
           return <FinancesPage profileId={profileId} />;
-        case "checkout":
-          return <CheckoutConfigPage profileId={profileId} />;
         case "settings":
           return <SettingsPage profileId={profileId} />;
         case "whatsapp-dashboard":

@@ -82,6 +82,7 @@ const App = () => {
               <Route path="/auth" element={<Auth />} />
               <Route path="/reset-password" element={<ResetPassword />} />
               <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/checkout" element={<Checkout />} />
               <Route path="/checkout/:serviceId" element={<Checkout />} />
               <Route path="/:slug/checkout/:serviceId" element={<Checkout />} />
               <Route path="/u/:slug/checkout/:serviceId" element={<LegacyCheckoutRedirect />} />

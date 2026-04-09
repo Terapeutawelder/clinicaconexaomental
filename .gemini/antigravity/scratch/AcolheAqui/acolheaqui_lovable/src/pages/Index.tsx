@@ -11,6 +11,7 @@ const FAQSection = lazy(() => import("@/components/FAQSection"));
 const SpecialtiesSection = lazy(() => import("@/components/SpecialtiesSection"));
 const VideoSection = lazy(() => import("@/components/VideoSection"));
 const TherapyOnlineSection = lazy(() => import("@/components/TherapyOnlineSection"));
+const GlobalServicesSection = lazy(() => import("@/components/GlobalServicesSection"));
 
 
 // Section loader component
@@ -454,7 +455,9 @@ const Index = () => {
       <Header />
       <HeroSection />
       
-      
+      <Suspense fallback={<SectionLoader />}>
+        <GlobalServicesSection />
+      </Suspense>
       <FeaturesSection />
       
       <Suspense fallback={<SectionLoader />}>

@@ -52,7 +52,6 @@ interface DashboardSidebarProps {
 const menuItems = [
   { id: "members-area", label: "Área de Membros", icon: Crown, section: "premium" },
   { id: "virtual-room", label: "Sala Virtual", icon: Video, section: "premium" },
-  { id: "checkout", label: "Checkout", icon: ShoppingCart, section: "premium" },
   { id: "tutorials", label: "Tutoriais", icon: GraduationCap, section: "premium" },
   { id: "settings", label: "Configurações", icon: Settings, section: "premium" },
   { id: "ai-scheduling", label: "Agente IA Agendamento", icon: Bot, section: "ia" },

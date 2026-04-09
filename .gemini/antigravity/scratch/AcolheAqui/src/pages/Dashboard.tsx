@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { User, Session } from "@supabase/supabase-js";
 import { toast } from "sonner";
+import { Clock, CheckCircle2, LogOut } from "lucide-react";
 import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
 import DashboardOverview from "@/components/dashboard/DashboardOverview";
 import AvailableHoursConfig from "@/components/dashboard/AvailableHoursConfig";
@@ -21,7 +22,6 @@ import {
 import AutomacoesPage from "@/components/dashboard/AutomacoesPage";
 import { cn } from "@/lib/utils";
 
-
 const Dashboard = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -29,6 +29,8 @@ const Dashboard = () => {
   const [session, setSession] = useState<Session | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [profileId, setProfileId] = useState<string | null>(null);
+  const [professionalStatus, setProfessionalStatus] = useState<string | null>(null);
+  const [isProfessional, setIsProfessional] = useState<boolean>(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   const currentTab = searchParams.get("tab") || "overview";
@@ -62,12 +64,14 @@ const Dashboard = () => {
   const fetchProfile = async (userId: string) => {
     const { data, error } = await supabase
       .from("profiles")
-      .select("id")
+      .select("id, professional_status, is_professional")
       .eq("user_id", userId)
       .maybeSingle();
 
     if (data) {
       setProfileId(data.id);
+      setProfessionalStatus(data.professional_status);
+      setIsProfessional(data.is_professional);
     }
   };
 
@@ -87,6 +91,53 @@ const Dashboard = () => {
 
   if (!user || !profileId) {
     return null;
+  }
+
+  // Show "Pending Approval" screen for professionals not yet approved
+  const allowedStatuses = ["approved", "active", "paid"];
+  if (isProfessional && !allowedStatuses.includes(professionalStatus || "")) {
+    return (
+      <div className="min-h-screen dashboard-theme flex items-center justify-center p-4">
+        <div className="w-full max-w-md bg-[hsl(215,40%,12%)] border border-primary/20 rounded-2xl p-8 text-center space-y-6 shadow-2xl">
+          <div className="flex justify-center">
+            <div className="p-4 bg-primary/10 rounded-full">
+              <Clock className="w-12 h-12 text-primary animate-pulse" />
+            </div>
+          </div>
+          
+          <div className="space-y-2">
+            <h2 className="text-2xl font-bold text-white">Cadastro em Análise</h2>
+            <p className="text-white/60">
+              Seu cadastro foi recebido com sucesso! Nossa equipe está revisando suas informações. 
+              Seu acesso será liberado em breve.
+            </p>
+          </div>
+
+          <div className="bg-white/5 rounded-xl p-6 text-left space-y-4 border border-white/5">
+            <div className="flex items-center gap-3">
+              <CheckCircle2 className="w-5 h-5 text-[hsl(145,70%,45%)]" />
+              <span className="text-sm text-white/80 font-medium">Etapa 1: Cadastro realizado</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <Clock className="w-5 h-5 text-primary" />
+              <span className="text-sm text-white/80 font-medium">Etapa 2: Aprovação pelo administrador</span>
+            </div>
+          </div>
+
+          <p className="text-primary text-sm font-medium">
+            A Equipe Conexão Mental agradece o seu cadastro! 💜
+          </p>
+
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-2 mx-auto text-white/50 hover:text-white transition-colors text-sm pt-4"
+          >
+            <LogOut className="w-4 h-4" />
+            Voltar para o login
+          </button>
+        </div>
+      </div>
+    );
   }
 
   const renderContent = () => {

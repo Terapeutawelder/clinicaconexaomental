@@ -325,15 +325,55 @@ serve(async (req) => {
           }
           
           // Also update related appointment if exists (for session services)
-          const { error: appointmentError } = await supabaseClient
+          const { data: updatedAppointments, error: appointmentError } = await supabaseClient
             .from('appointments')
-            .update({ payment_status: 'paid' })
+            .update({ payment_status: 'paid', status: 'confirmed' })
             .eq('professional_id', transaction.professional_id)
             .eq('client_email', transaction.customer_email)
-            .eq('payment_status', 'pending');
+            .eq('payment_status', 'pending')
+            .select();
             
           if (appointmentError) {
-            console.log('No matching appointment found or error:', appointmentError);
+            console.log('Error updating appointment:', appointmentError);
+          } else if (updatedAppointments && updatedAppointments.length > 0) {
+            console.log('Appointments updated to paid/confirmed:', updatedAppointments.length);
+            
+            for (const appt of updatedAppointments) {
+              let serviceName = '';
+              let amountCents = transaction.amount ? Math.round(Number(transaction.amount) * 100) : 0;
+              
+              if (transaction.service_id) {
+                const { data: service } = await supabaseClient
+                  .from('services')
+                  .select('title')
+                  .eq('id', transaction.service_id)
+                  .maybeSingle();
+                if (service) serviceName = service.title;
+              }
+              
+              const notificationData = {
+                professionalId: appt.professional_id,
+                clientName: appt.client_name || transaction.customer_name || 'Paciente',
+                clientEmail: appt.client_email,
+                clientPhone: appt.client_phone || '',
+                appointmentDate: appt.appointment_date,
+                appointmentTime: appt.start_time,
+                serviceName: serviceName,
+                amountCents: amountCents,
+                notes: appt.notes || '',
+                virtualRoomLink: appt.meet_link || ''
+              };
+              
+              console.log('Invoking send-appointment-notification with:', notificationData);
+              const { error: notifyError } = await supabaseClient.functions.invoke(
+                'send-appointment-notification',
+                { body: notificationData }
+              );
+              
+              if (notifyError) {
+                console.error('Failed to trigger notification webhook:', notifyError);
+              }
+            }
           }
         }
       }
